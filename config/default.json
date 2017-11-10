@@ -20,12 +20,13 @@
   "html": [
     {
 			"name": "homepage",
-      "title": "Everything is Awesome",
+      "title": "RK7",
       "template": "_default.html",
       "filename": "index.html"
     }
   ],
   "app": {
-    "description": "config inside 'app' will be injected to your frontend code automatically"
+    "description": "config inside 'app' will be injected to your frontend code automatically",
+    "apiURL": "http://www.reddit.com/r"
   }
 }

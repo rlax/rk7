@@ -1,0 +1,19 @@
+.rk-private {}
+
+.rk-restaurants-list {
+  font-size: 26px;
+  background: #eee;
+  overflow: auto;
+  position: fixed;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 250px;
+  display: block;
+}
+
+.rk-editarea {
+  margin-left: 250px;
+  display: block;
+}

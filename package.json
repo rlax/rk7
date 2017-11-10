@@ -81,6 +81,7 @@
     "webpack-s3-plugin": "^1.0.0-rc.0"
   },
   "dependencies": {
+    "axios":"0.17.0",
     "history": "^4.6.3",
     "immutable": "^3.8.1",
     "prop-types": "^15.6.0",
@@ -93,6 +94,7 @@
     "react-router-redux": "^4.0.8",
     "redux": "^3.7.1",
     "redux-actions": "^2.2.1",
+    "redux-promise-middleware": "^4.4.2",
     "redux-saga": "^0.15.6",
     "reselect": "^3.0.1"
   },

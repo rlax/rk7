@@ -24,8 +24,8 @@ export const actions = {
 
 export const reducers = {
   [UPDATE_EXAMPLE]: (state, { payload }) =>
-    state.merge({
-      ...payload,
+    state.merge({ 
+      ...payload, 
     }),
 }
 

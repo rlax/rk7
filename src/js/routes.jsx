@@ -5,6 +5,7 @@ import {
   withRouter,
 } from 'react-router-dom';
 import { Header } from './common/components/Header';
+import { Login } from './common/components/Login';
 import ExampleRouteHandler from './views/example';
 
 import '../assets/fonts/fonts.css';
@@ -16,7 +17,7 @@ const JustAnotherPage = () => (
   </div>
 );
 
-const HeaderWithRouter = withRouter(props => <Header {...props} />);
+const HeaderWithRouter = withRouter(props => <Header {...props} />);  
 
 module.exports = (
   <div className="container">
@@ -24,7 +25,8 @@ module.exports = (
     <hr />
     <div className="container__content">
       <Switch>
-        <Route exact path="/" component={ExampleRouteHandler} />
+        {/* <Route exact path="/" component={ExampleRouteHandler} /> */}
+        <Route path="/login" component={Login} />
         <Route path="/page" component={JustAnotherPage} />
         <Route path="*" component={ExampleRouteHandler} />
       </Switch>
