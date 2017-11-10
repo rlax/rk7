@@ -42,6 +42,17 @@ class Login extends React.Component {
   }
 
   login = () => {
+    // axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
+    //   .then((res) => { 
+    //     const posts = res.data.data.children.map(obj => obj.data);
+    //     const fakeJWT = posts.length + Math.random();
+    //     localStorage.setItem('rk7token', fakeJWT);
+    //     // this.props.successLogin({ auth: true, user: 'Logged User', fakeJWT });
+    //   })
+    //   .then(() => {
+    //     axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
+    //   })
+    //   .catch((err) => {console.log(err)});
     this.props.successLogin({ auth: true, user: 'Fake Logged User' });
     this.setState({ redirectToReferrer: true });
   }
