@@ -23,17 +23,7 @@ class PrivateView extends Component {
       // }
     };
     console.groupCollapsed('API call with token:', localStorage.getItem('rk7token'));
-    // axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
-    //   .then((res) => { 
-    //     const posts = res.data.data.children.map(obj => obj.data);
-    //     const fakeJWT = posts.length + Math.random();
-    //     localStorage.setItem('rk7token', fakeJWT);
-    //     // this.props.successLogin({ auth: true, user: 'Logged User', fakeJWT });
-    //   })
-    //   .then(() => {
-    //     axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
-    //   })
-    //   .catch((err) => {console.log(err)});
+
   }
 
   render() {

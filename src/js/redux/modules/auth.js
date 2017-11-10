@@ -31,13 +31,13 @@ export const reducers = {
   [SUCCESS_LOGIN]: (state, { payload }) =>
     state.merge({ 
       ...payload,
-      loading: false 
+      loading: false,
     }),
 }
 
 export const initialState = () =>
   Map({
-    auth: false,
+    auth: !!localStorage.rk7token,
     loading: false,
     user: '',
   })
