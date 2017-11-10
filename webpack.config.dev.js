@@ -22,6 +22,7 @@ webpackConfig.output = Object.assign(webpackConfig.output, webpackDevOutput);
 webpackConfig.devServer = {
   clientLogLevel: "error",
   compress: true,
+  headers: { "Access-Control-Allow-Origin": "*" },
   noInfo: true,
   quiet: true,
   stats: "errors-only",
