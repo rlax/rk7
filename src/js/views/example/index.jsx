@@ -16,7 +16,6 @@ import { ErrorBoundary } from '../../common/components/Utilities';
 require('../../../style/index.css');
 
 const mapStateToProps = (state) => {
-  console.log(state);
   const token = localStorage.getItem('rk7token');
   console.log(token);
   return {
@@ -38,16 +37,15 @@ class ExampleView extends Component {
   }
 
   componentDidMount() {
-    this.props.getAwesomeCode();
+    // this.props.getAwesomeCode();
     console.log(__CONFIG__);
-    this.props.postLogin();
     const config = {
       // headers: {
       //   // 'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
       // }
     };
     console.log('Auth >>> with token', localStorage.getItem('rk7token'));
-    axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
+    /* axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
       .then((res) => { 
         const posts = res.data.data.children.map(obj => obj.data);
         const fakeJWT = posts.length + Math.random();
@@ -57,7 +55,7 @@ class ExampleView extends Component {
       .then(() => {
         axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
       })
-      .catch((err) => {console.log(err)});
+      .catch((err) => {console.log(err)}); */
   }
 
   render() {
@@ -73,9 +71,9 @@ class ExampleView extends Component {
             <Link to="/login">Страница логина</Link>
           </div>
         }
-        <ErrorBoundary>
+        {/* <ErrorBoundary>
           <ExampleWithError {...this.props} />
-        </ErrorBoundary>
+        </ErrorBoundary> */}
       </div>
     )
   }

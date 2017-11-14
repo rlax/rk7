@@ -5,6 +5,8 @@ import {
 } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import axios from 'axios';
+
 import { actions as authActions } from '../../../redux/modules/auth';
 
 export const PrivateRoute = ({ component: NamedComponent, ...rest }) => (
@@ -42,18 +44,23 @@ class Login extends React.Component {
   }
 
   login = () => {
-    // axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
-    //   .then((res) => { 
-    //     const posts = res.data.data.children.map(obj => obj.data);
-    //     const fakeJWT = posts.length + Math.random();
-    //     localStorage.setItem('rk7token', fakeJWT);
-    //     // this.props.successLogin({ auth: true, user: 'Logged User', fakeJWT });
-    //   })
-    //   .then(() => {
-    //     axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
-    //   })
-    //   .catch((err) => {console.log(err)});
-    this.props.successLogin({ auth: true, user: 'Fake Logged User' });
+    this.props.postLogin();
+    axios.get(`${__CONFIG__.apiURL}/login`) // TODO: config
+      .then((res) => { 
+        const fakeJWT = res.data.data;
+        localStorage.setItem('rk7token', fakeJWT);
+        this.props.successLogin({ user: 'Logged User', fakeJWT });
+      })
+      .then(() => {
+        axios.get(`${__CONFIG__.apiURL}/login`) // TODO: config
+      })
+      .catch((err) => {
+        console.groupCollapsed('Login Network Error', err);
+        // const fakeJWT = posts.length + Math.random();
+        // localStorage.setItem('rk7token', fakeJWT);
+        // this.props.successLogin({ user: 'Logged User', fakeJWT });
+      });
+    // this.props.successLogin({ auth: true, user: 'Fake Logged User', loading: false });
     this.setState({ redirectToReferrer: true });
   }
 
@@ -64,7 +71,7 @@ class Login extends React.Component {
     
     if (auth || redirectToReferrer) {
       return (
-        <Redirect to={from}/>
+        <Redirect to={from} />
       )
     }
     
