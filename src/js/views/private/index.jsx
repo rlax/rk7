@@ -89,26 +89,29 @@ class PrivateView extends Component {
     };
     console.groupCollapsed('API call with token:', localStorage.getItem('rk7token'));
     
-    axios.get(`${__CONFIG__.apiURL}/restaurants`, config)
+    axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
         .then((res) => { 
         const restaurantsList = res.data.data;
         this.setState({ restaurantsList });
       })
       .then(() => {
-        axios.get(`${__CONFIG__.apiURL}/roles`, config)
+        axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=7aaae94a-6a77-4ab8-9665-b9675e025ea1`, config)
         // TODO: with RestGUID
           .then((res) => {
-            const rolesList = res.data;
+            const rolesList = res.data.data;
             this.setState({ rolesList });
           })
       })
       .then(() => {
-        axios.get(`${__CONFIG__.apiURL}/employees`, config)
-        // TODO: with roleGUID
-          .then((res) => {
-            const employees = res.data;
-            this.setState({ employees });
-          })
+        setTimeout(() => {
+          axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=f917a1b4-5227-401e-9bbe-a718148087df`, config)
+          // TODO: with roleGUID
+            .then((res) => {
+              const employees = res.data.data;
+              console.log(employees);
+              this.setState({ employees });
+            })
+        }, 500)
       })
       //.then(() => {
         /* let data = {
@@ -144,13 +147,13 @@ class PrivateView extends Component {
         <div className="rk-editarea">
           <Route path="/:restaurantId" component={EmployeesEditable} />
           {
-            this.state.rolesList.map(role => (<h2 className="role-title">{role.name}</h2>))
+            console.log(this.state.rolesList) && this.state.rolesList.length !== 0 && this.state.rolesList.map(role => (<h2 className="role-title">{role.name}</h2>))
           }
           <h1>Все сотрудники</h1>
           <div className="cards-container">
             <div className="cards">
               {
-                this.state.employees.map(emp => (
+                this.state.employees.length !== 0 && this.state.employees.map(emp => (
                   <CardExampleExpandable {...emp} />
                 ))
               }
