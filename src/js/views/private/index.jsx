@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Link, NavLink } from 'react-router-dom';
+import FlatButton from 'material-ui/FlatButton';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 import axios from 'axios';
 
@@ -40,7 +42,32 @@ const EmployeeCard = props => (
     <div className="employeeCard-row">guid - {props.guid}</div>
     <div className="employeeCard-row">code - {props.code}</div>
     <div className="employeeCard-row">id - {props.id}</div>
-    <div className="employeeCard-row card-meta">Role :: <pre>--^^--</pre></div>
+    {<div className="employeeCard-row card-meta">Role :: <pre>--^^--</pre></div>}
+  </div>
+);
+
+const CardExampleExpandable = props => (
+  <div className="employeeCard">
+    <Card>
+      <CardHeader
+        title={props.name}
+        subtitle={props.code}
+        actAsExpander={true}
+        showExpandableButton={true}
+      />
+      <CardActions>
+        <FlatButton label="Action1" />
+        <FlatButton label="Action2" />
+      </CardActions>
+      <CardText expandable={true}>
+        <div className="employeeCard-row card-header">Cardcode - {props.cardCode}</div>
+        <div className="employeeCard-row">name - {props.name}</div>
+        <div className="employeeCard-row">guid - {props.guid}</div>
+        <div className="employeeCard-row">code - {props.code}</div>
+        <div className="employeeCard-row">id - {props.id}</div>
+        {/* <div className="employeeCard-row card-meta">Role :: <pre>--^^--</pre></div> */}
+      </CardText>
+    </Card>
   </div>
 );
 
@@ -124,11 +151,12 @@ class PrivateView extends Component {
             <div className="cards">
               {
                 this.state.employees.map(emp => (
-                  <EmployeeCard {...emp} />
+                  <CardExampleExpandable {...emp} />
                 ))
               }
             </div>
           </div>
+          {/* <CardExampleExpandable /> */}
           {/* <ul>
             <li>lorem</li>
             <li>ipsum</li>

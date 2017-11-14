@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import { Header } from './common/components/Header';
 import { Login } from './common/components/Login';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ExampleRouteHandler from './views/example';
 
 import '../assets/fonts/fonts.css';
@@ -20,6 +21,7 @@ const JustAnotherPage = () => (
 const HeaderWithRouter = withRouter(props => <Header {...props} />);  
 
 module.exports = (
+  <MuiThemeProvider>
   <div className="container">
     <HeaderWithRouter />
     <hr />
@@ -32,4 +34,5 @@ module.exports = (
       </Switch>
     </div>
   </div>
+  </MuiThemeProvider>
 );
