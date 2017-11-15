@@ -18,7 +18,7 @@ const JustAnotherPage = () => (
   </div>
 );
 
-const HeaderWithRouter = withRouter(props => <Header {...props} />);  
+const HeaderWithRouter = withRouter(props => <Header {...props} />);
 
 module.exports = (
   <MuiThemeProvider>

@@ -1,6 +1,7 @@
 {
   "login": {
-    "data": "D41C5CCBA1CF4E7091C9EFFACF1C429C"
+    "user": "111",
+    "pass": "123123"
   },
   "restaurants": {
     "data": [
@@ -64,15 +65,9 @@
   ],
   "employees": [
     {
-      "cardCode": "100500",
-      "roles": {
-        "1": 0,
-        "1010175": 0
-      },
-      "guid": "bb895ed6-faa9-4105-a844-4eb3b9250dd3",
-      "id": 1029624,
-      "name": "Меркушева Полина Андреевна",
-      "code": 1029624
+      "cardCode": "123",
+      "role": "123",
+      "id": 1029624
     },
     {
       "cardCode": "100277",

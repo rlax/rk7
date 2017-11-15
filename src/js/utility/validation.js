@@ -23,9 +23,9 @@ export function phone(value: string) {
   return null;
 }
 
-export function required(value: string) {
+export function required(value) {
   if (isEmpty(value)) {
-    return 'Required';
+    return 'Обязательное поле';
   }
 
   return null;
@@ -53,7 +53,7 @@ export function maxLength(max: number) {
 
 export function integer(value: string|number) {
   if (!Number.isInteger(Number(value))) {
-    return 'Must be an integer';
+    return 'Введенное код должен быть целым числом';
   }
 
   return null;

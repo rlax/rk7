@@ -3,6 +3,7 @@ import {
   Redirect,
   Route,
 } from 'react-router-dom';
+import LoginForm from './LoginForm';
 import { connect } from 'react-redux';
 
 import axios from 'axios';
@@ -43,18 +44,20 @@ class Login extends React.Component {
     redirectToReferrer: false,
   }
 
-  login = () => {
+  login = (values) => {
+    console.log(values);
     this.props.postLogin();
-    let data = {
-      "user": "Сергеева Александра Анатольевна",
-      "pass": "1"
-    };
+    // let data = {
+    //   "user": "Сергеева Александра Анатольевна",
+    //   "pass": "1"
+    // };
+    const data = values;
     // const config = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
     axios.post(`${__CONFIG__.apiURL}/login`, data) // TODO: config
       .then((res) => { 
         const fakeJWT = res.data.data;
         localStorage.setItem('rk7token', fakeJWT);
-        this.props.successLogin({ user: 'Logged User', fakeJWT });
+        this.props.successLogin({ user: data.user, fakeJWT });
       })
       .catch((err) => {
         console.groupCollapsed('Login Network Error', err);
@@ -79,8 +82,9 @@ class Login extends React.Component {
     
     return (
       <div>
-        <p>You must log in to view the page at {from.pathname}</p>
-        <button onClick={this.login}>Log in</button>
+        <p>Для редактирования требуется войти, используя ваше имя и пароль {from.pathname}</p>
+        <LoginForm onSubmit={this.login} />
+        {/* <button onClick={this.login}>Log in</button> */}
       </div>
     )
   }

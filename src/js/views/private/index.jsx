@@ -6,6 +6,9 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 import axios from 'axios';
 
+import Form from '../pageSpecific/Form';
+import EmployeeEditForm from '../pageSpecific/EmployeeEditForm';
+
 import { actions as exampleActions } from '../../redux/modules/example';
 
 require('../../../style/index.css');
@@ -56,10 +59,11 @@ const CardExampleExpandable = props => (
         showExpandableButton={true}
       />
       <CardActions>
-        <FlatButton label="Action1" />
-        <FlatButton label="Action2" />
+        <FlatButton disabled label="- - -" />
+        <FlatButton disabled label="+ + +" />
       </CardActions>
       <CardText expandable={true}>
+        <EmployeeEditForm onSubmit={props.saveEmployeeFn} />
         <div className="employeeCard-row card-header">Cardcode - {props.cardCode}</div>
         <div className="employeeCard-row">name - {props.name}</div>
         <div className="employeeCard-row">guid - {props.guid}</div>
@@ -80,6 +84,18 @@ class PrivateView extends Component {
     this.state = {restaurantsList: [], employees: [], rolesList: []};
   }
 
+  saveEmployee = (values) => {
+    console.log(values);
+    
+    let data = values;
+    axios.put(`${__CONFIG__.apiURL}/employees/1029624`, data) //TODO: add config
+        // TODO: with roleGUID
+      .catch((err) => {
+        console.groupCollapsed('Login Network Error', err);
+      });
+    // this.props.successLogin({ auth: true, user: 'Fake Logged User', loading: false });
+  }
+
   componentDidMount() {
     console.log(__CONFIG__);
     const config = {
@@ -95,7 +111,7 @@ class PrivateView extends Component {
         this.setState({ restaurantsList });
       })
       .then(() => {
-        axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=7aaae94a-6a77-4ab8-9665-b9675e025ea1`, config)
+        axios.get(`${__CONFIG__.apiURL}/roles`, config)
         // TODO: with RestGUID
           .then((res) => {
             const rolesList = res.data.data;
@@ -104,10 +120,10 @@ class PrivateView extends Component {
       })
       .then(() => {
         setTimeout(() => {
-          axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=f917a1b4-5227-401e-9bbe-a718148087df`, config)
+          axios.get(`${__CONFIG__.apiURL}/employees`, config)
           // TODO: with roleGUID
             .then((res) => {
-              const employees = res.data.data;
+              const employees = res.data;
               console.log(employees);
               this.setState({ employees });
             })
@@ -149,12 +165,13 @@ class PrivateView extends Component {
           {
             console.log(this.state.rolesList) && this.state.rolesList.length !== 0 && this.state.rolesList.map(role => (<h2 className="role-title">{role.name}</h2>))
           }
+          {/* <Form employeeGuid="A1-KUN" /> */}
           <h1>Все сотрудники</h1>
           <div className="cards-container">
             <div className="cards">
               {
-                this.state.employees.length !== 0 && this.state.employees.map(emp => (
-                  <CardExampleExpandable {...emp} />
+                this.state.employees.length !== 0 && this.state.employees.map((emp, index) => (
+                  <CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} {...emp} />
                 ))
               }
             </div>
