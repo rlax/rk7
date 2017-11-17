@@ -3,20 +3,25 @@ import PropTypes from 'prop-types';
 import { Route, Link, NavLink } from 'react-router-dom';
 import FlatButton from 'material-ui/FlatButton';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import { restaListSelector, restaByIdSelector } from '../../redux/selectors/restaSelector';
 
 import axios from 'axios';
 
 import Form from '../pageSpecific/Form';
 import EmployeeEditForm from '../pageSpecific/EmployeeEditForm';
+import EmployeesEditable from '../pageSpecific/EmployeesEditable';
+
+import { connect } from 'react-redux';
 
 import { actions as exampleActions } from '../../redux/modules/example';
+import { actions as restaActions } from '../../redux/modules/resta';
 
 require('../../../style/index.css');
 require('../../../style/private.css');
 
 const RestaurantInfo = props => (<li>
   <NavLink 
-    to={`/${props.id}`}
+    to={`/${props.restMap.get('id')}`}
     activeStyle={{
       fontStyle: 'italic',
       color: 'grey',
@@ -24,19 +29,12 @@ const RestaurantInfo = props => (<li>
       borderRight: '2px solid #ababe4',
     }}
   >
-    <div className="restaurantCard-title">{props.id}</div>
-    <div className="restaurantCard-row">{props.guid}</div>
-    <div className="restaurantCard-row">{props.name}</div>
-    <div className="restaurantCard-row">{props.code}</div>
+    <div className="restaurantCard-title">{props.restMap.get('id')}</div>
+    <div className="restaurantCard-row">{props.restMap.get('guid')}</div>
+    <div className="restaurantCard-row">{props.restMap.get('name')}</div>
+    <div className="restaurantCard-row">{props.restMap.get('code')}</div>
   </NavLink>
 </li>);
-
-const EmployeesEditable = ({ match }) => (
-  <div className="employeeCard">
-    <div className="employeeCard-title">Rest - {match.params.restaurantId}</div>
-    <div className="employeeCard-title">{match.params.restaurantId}</div>
-  </div>
-);
 
 const EmployeeCard = props => (
   <div className="employeeCard">
@@ -55,15 +53,15 @@ const CardExampleExpandable = props => (
       <CardHeader
         title={props.name}
         subtitle={props.code}
-        actAsExpander={true}
-        showExpandableButton={true}
+        actAsExpander={false}
+        showExpandableButton={false}
       />
-      <CardActions>
+      {/* <CardActions>
         <FlatButton disabled label="- - -" />
         <FlatButton disabled label="+ + +" />
-      </CardActions>
-      <CardText expandable={true}>
-        <EmployeeEditForm onSubmit={props.saveEmployeeFn} />
+      </CardActions> */}
+      <CardText expandable={false}>
+        <EmployeeEditForm onSubmit={props.saveEmployeeFn} empData={{name: props.name, cardCode: props.cardCode, guid: props.guid, id: props.id}} />
         <div className="employeeCard-row card-header">Cardcode - {props.cardCode}</div>
         <div className="employeeCard-row">name - {props.name}</div>
         <div className="employeeCard-row">guid - {props.guid}</div>
@@ -75,6 +73,14 @@ const CardExampleExpandable = props => (
   </div>
 );
 
+const mapStateToProps = (state) => {
+  return {
+    restaurants: restaListSelector(state),
+    firstR: restaByIdSelector(state, '1'),
+  }
+};
+
+@connect(mapStateToProps)
 class PrivateView extends Component {
   static PropTypes = {
   }
@@ -104,19 +110,14 @@ class PrivateView extends Component {
       }
     };
     console.groupCollapsed('API call with token:', localStorage.getItem('rk7token'));
+
+    this.props.getResta();
     
     axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
         .then((res) => { 
         const restaurantsList = res.data.data;
         this.setState({ restaurantsList });
-      })
-      .then(() => {
-        axios.get(`${__CONFIG__.apiURL}/roles`, config)
-        // TODO: with RestGUID
-          .then((res) => {
-            const rolesList = res.data.data;
-            this.setState({ rolesList });
-          })
+        this.props.successResta({ restaurantsList });
       })
       .then(() => {
         setTimeout(() => {
@@ -156,15 +157,18 @@ class PrivateView extends Component {
         <div className="rk-restaurants-list">
           <ul>
             {
-              this.state.restaurantsList.map(rest => (<RestaurantInfo {...rest} >--</RestaurantInfo>))
+              !!this.props.restaurants && this.props.restaurants.valueSeq().map(rest => (
+                <RestaurantInfo restMap={rest} >--</RestaurantInfo>)
+              )
             }
           </ul>
         </div>
         <div className="rk-editarea">
-          <Route path="/:restaurantId" component={EmployeesEditable} />
-          {
-            console.log(this.state.rolesList) && this.state.rolesList.length !== 0 && this.state.rolesList.map(role => (<h2 className="role-title">{role.name}</h2>))
-          }
+          <Route 
+            path="/:restaurantId"
+            render={props => (
+              <EmployeesEditable restId={props.match.params.restaurantId} />
+            )}/>
           {/* <Form employeeGuid="A1-KUN" /> */}
           <h1>Все сотрудники</h1>
           <div className="cards-container">

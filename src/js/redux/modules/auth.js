@@ -14,7 +14,6 @@ export const constants = {
 // ------------------------------------
 export const postLogin = createAction(POST_LOGIN);
 export const successLogin = createAction(SUCCESS_LOGIN, (result) => {
-  console.log(result);
   return result
 });
 
@@ -39,7 +38,7 @@ export const initialState = () =>
   Map({
     auth: !!localStorage.rk7token,
     loading: false,
-    user: '',
+    user: 'Default',
   })
 
 export default handleActions(reducers, initialState());
