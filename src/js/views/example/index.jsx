@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import { actions as exampleActions } from '../../redux/modules/example';
 import { actions as authActions } from '../../redux/modules/auth';
+import { actions as restaActions } from '../../redux/modules/resta';
 import { exampleSelector } from '../../redux/selectors/exampleSelector';
 import { Example, ExampleWithError } from '../../common/components/Example';
 import { PrivateRoute, Login } from '../../common/components/Login';
@@ -28,6 +29,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   ...exampleActions,
   ...authActions,
+  ...restaActions,
 };
 
 @connect(mapStateToProps, mapDispatchToProps)

@@ -5,6 +5,7 @@ import {
   compose,
   createStore,
 } from 'redux';
+import Immutable from 'immutable';
 
 import sagas from './sagas';
 import rootReducer from './rootReducers';
@@ -12,7 +13,11 @@ import rootReducer from './rootReducers';
 // Redux DevTools Extension for Chrome and Firefox
 const reduxDevTool = () => {
   return typeof window === 'object' &&
-  typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f;
+  typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension({
+      serialize: {
+        immutable: Immutable,
+      }
+    }) : f => f;
 };
 
 export default function configureStore(initialState, history) {

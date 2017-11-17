@@ -3,10 +3,12 @@ import { routerReducer as routing } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import example from './modules/example';
 import auth from './modules/auth';
+import resta from './modules/resta';
 
 export default combineReducers({
   example,
   auth,
   routing,
+  resta,
   form: formReducer
 });
