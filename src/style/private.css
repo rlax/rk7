@@ -28,6 +28,11 @@ ul {
   padding: 0;
 }
 
+.restaurantRoles-row {
+  font-style: bold;
+  border-top: 1px solid #ccc;
+}
+
 li {
   font: 200 $fz/1.5 Helvetica, Verdana, sans-serif;
   border-bottom: 1px solid #ccc;
