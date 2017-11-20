@@ -21,11 +21,11 @@ class EmployeesEditable extends Component {
         'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
       }
     };
-    axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${restId}`, config)
-      .then((res) => {
-        const rolesList = res.data; // TODO: with data.data
-        this.setState({ rolesList });
-    })
+    // axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${restId}`, config)
+    //   .then((res) => {
+    //     const rolesList = res.data; // TODO: with data.data
+    //     this.setState({ rolesList });
+    // })
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,11 +35,11 @@ class EmployeesEditable extends Component {
           'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
         }
       };
-      axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.restId}`, config)
-        .then((res) => {
-          const rolesList = res.data; // TODO: with data.data
-          this.setState({ rolesList });
-        })
+      // axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.restId}`, config)
+      //   .then((res) => {
+      //     const rolesList = res.data; // TODO: with data.data
+      //     this.setState({ rolesList });
+      //   })
     }
   }
 

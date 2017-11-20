@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 import axios from 'axios';
 
 import { actions as exampleActions } from '../../redux/modules/example';
 import { actions as authActions } from '../../redux/modules/auth';
 import { actions as restaActions } from '../../redux/modules/resta';
+import { actions as emploActions } from '../../redux/modules/emplo';
+import { actions as rolesActions } from '../../redux/modules/roles';
 import { exampleSelector } from '../../redux/selectors/exampleSelector';
 import { Example, ExampleWithError } from '../../common/components/Example';
 import { PrivateRoute, Login } from '../../common/components/Login';
@@ -30,6 +32,8 @@ const mapDispatchToProps = {
   ...exampleActions,
   ...authActions,
   ...restaActions,
+  ...emploActions,
+  ...rolesActions,
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -65,7 +69,18 @@ class ExampleView extends Component {
       <div>
         {
           this.props.auth &&
-          <PrivateView {...this.props} />
+          <Switch>
+            <Route 
+              path="/"
+              exact
+              render={() => (<PrivateView {...this.props} />)}
+            />
+            <Route 
+              path="/:restaurantId"
+              render={props => (
+                <PrivateView {...this.props} selectedRestId={props.match.params.restaurantId} />
+            )}/>
+          </Switch>  
         }
         {
           !this.props.auth &&
