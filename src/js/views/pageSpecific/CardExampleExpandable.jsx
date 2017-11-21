@@ -42,10 +42,10 @@ class CardExampleExpandable extends Component {
     const { isExpandedForEdit } = this.props;
     return (
       <div className="employeeCard">
-        <Card expanded={this.state.expanded} onExpandChange={(expanded)=>this.handleExpandChange(expanded)}>
+        <Card expanded={isExpandedForEdit}>
           <Toggle
-            toggled={this.state.expanded}
-            onToggle={this.handleToggle}
+            toggled={isExpandedForEdit}
+            onToggle={()=>this.props.selectEmployeeFn(empMap.get('guid'))}
             labelPosition="right"
             label="Редактировать"
           />
@@ -53,7 +53,7 @@ class CardExampleExpandable extends Component {
             title={empMap.get('name')}
             subtitle={empMap.get('code')}
             actAsExpander={false}
-            showExpandableButton={true}
+            showExpandableButton={false}
           />
           {/* <CardActions>
             <FlatButton disabled label="- - -" />
@@ -61,7 +61,7 @@ class CardExampleExpandable extends Component {
           </CardActions> */}
           <CardText expandable>
             <EmployeeEditForm
-              onSubmit={this.props.saveEmployeeFn}
+              onSubmit={(values)=>this.props.saveEmployeeFn(empMap,values)}
               form={`${empMap.get('guid')}`}
               initialValues={
                 {name: empMap.get('name'), cardCode: empMap.get('cardCode'), guid: empMap.get('guid'), id: empMap.get('id'),
