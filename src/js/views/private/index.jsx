@@ -90,12 +90,17 @@ class PrivateView extends Component {
     this.state = {restaurantsList: [], employees: [], rolesList: []};
   }
 
-  saveEmployee = (values) => {
+  saveEmployee = (empMap, values) => {
     console.log(values);
-    
-    let data = values;
-    axios.put(`${__CONFIG__.apiURL}/employees/${data.id}`, data) //TODO: add config
-        // TODO: with roleGUID
+    let currentRestId = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+    let prevRoles = empMap.get('roles');
+    let roleObj = prevRoles.toObject();
+    roleObj[currentRestId] = values.role;
+    values.roles = roleObj;
+    const putValues = (
+      ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
+    )(values)
+    axios.put(`${__CONFIG__.apiURL}/employees/${putValues.id}`, putValues)
       .catch((err) => {
         console.groupCollapsed('Login Network Error', err);
       });
@@ -103,9 +108,12 @@ class PrivateView extends Component {
   }
 
   selectEmployee = (guid) => {
-    console.log(guid);
-    
-    this.props.selectEmpl({ guid });
+    if (this.props.ui.selectedGuidForEdit === guid) {
+      console.log('same');
+      this.props.selectEmpl({ guid: '' });
+    } else {
+      this.props.selectEmpl({ guid });
+    }
   }
 
   componentDidMount() {
