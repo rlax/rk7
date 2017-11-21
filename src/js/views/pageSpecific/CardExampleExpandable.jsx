@@ -64,12 +64,12 @@ class CardExampleExpandable extends Component {
               onSubmit={(values)=>this.props.saveEmployeeFn(empMap,values)}
               form={`${empMap.get('guid')}`}
               initialValues={
-                {name: empMap.get('name'), cardCode: empMap.get('cardCode'), guid: empMap.get('guid'), id: empMap.get('id'),
+                {name: empMap.get('name'), cardCode: empMap.get('cardCode'), code: empMap.get('code'), guid: empMap.get('guid'), id: empMap.get('id'),
                 role: values.role
                 }
               }
               empData={
-                {name: empMap.get('name'), cardCode: empMap.get('cardCode'), guid: empMap.get('guid'), id: empMap.get('id'),
+                {name: empMap.get('name'), cardCode: empMap.get('cardCode'), code: empMap.get('code'), guid: empMap.get('guid'), id: empMap.get('id'),
                 availableRoles: values.availableRoles}
               }
             />
