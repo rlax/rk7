@@ -24,3 +24,8 @@ h1, h2 {
   color: $color-title;
   font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
+
+.rk-remove {
+  font-size: 10px;
+  color: rgba(168, 214, 252, 0.863);
+}

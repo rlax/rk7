@@ -32,13 +32,13 @@ export const reducers = {
     const rolesById = payload.roles.reduce(
       (map,rest) => {
         let mapById = Object.assign({}, map);
-        rest.restId = payload.restId;
+        rest.restGuid = payload.restGuid;
         mapById[rest.id] = rest;
         
         return mapById
       }, {}
     )
-    return state.merge({
+    return state.mergeDeep({
       rolesById,
       loading: false,
     });

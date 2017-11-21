@@ -1,18 +1,17 @@
 import React from 'react'
 import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { TextField } from 'redux-form-material-ui';
+import { TextField, SelectField } from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
+import MenuItem from 'material-ui/MenuItem'
 import { connect } from 'react-redux';
-import { emplByIdListSelector, employeeTotalSelector, emploMapByIdDataSelector } from '../../redux/selectors/emploSelector';
 
 import { required, integer } from '../../utility/validation';
 
 let EmployeeEditForm = (props) => {
-  const { handleSubmit, pristine, reset, submitting, initialValues, form } = props
+  const { handleSubmit, pristine, reset, submitting, initialValues, form, empData } = props
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Код карты</label>
         <div>
           <Field
             name="cardCode"
@@ -24,15 +23,16 @@ let EmployeeEditForm = (props) => {
         </div>
       </div>
       <div>
-        <label>Роль</label>
         <div>
           <Field
             name="role"
-            component={TextField}
+            component={SelectField}
             hintText="Роль"
             floatingLabelText="Роль"
-            validate={[required, integer]}
-          />
+          >
+            {empData.availableRoles.map((role) => (<MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />))}
+            <MenuItem value="0" primaryText="Сбросить роль" />
+          </Field>
         </div>
       </div>
       <div>

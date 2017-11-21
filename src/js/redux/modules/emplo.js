@@ -56,7 +56,7 @@ export const initialState = () =>
     empl: [],
     emplById: new Map(),
     loading: false,
-    selectedGuidForEdit: '',
+    selectedGuidForEdit: '5b5f9881-ae38-481b-9b06-261d258f97f1',
   })
 
 export default handleActions(reducers, initialState());
