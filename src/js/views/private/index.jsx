@@ -91,7 +91,11 @@ class PrivateView extends Component {
   }
 
   saveEmployee = (empMap, values) => {
-    console.log(values);
+    const config = {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+      }
+    };
     let currentRestId = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
     let prevRoles = empMap.get('roles');
     let roleObj = prevRoles.toObject();
@@ -100,7 +104,7 @@ class PrivateView extends Component {
     const putValues = (
       ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
     )(values)
-    axios.put(`${__CONFIG__.apiURL}/employees/${putValues.id}`, putValues)
+    axios.put(`${__CONFIG__.apiURL}/employees/${putValues.guid}`, putValues, config)
       .catch((err) => {
         console.groupCollapsed('Login Network Error', err);
       });
@@ -142,63 +146,73 @@ class PrivateView extends Component {
       axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${this.props.selectedRestId}`, config)
     // TODO: with roleGUID
       .then((res) => {
-        const roles = res.data;
+        const roles = res.data.data;
         this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
         console.groupCollapsed('Network Error', err);
       });
     }
-
-    this.props.getEmpl();
-
-    axios.get(`${__CONFIG__.apiURL}/employees`, config)
-    // TODO: with roleGUID
-      .then((res) => {
-        const employees = res.data;
-        // console.log(employees);
-        // this.setState({ employees });
-        this.props.successEmpl({ employees });
-      })  
-      //.then(() => {
-        /* let data = {
-          "cardCode" : "100500",
-          "roles" : {
-              "1010175" : 0,
-              "1" : 0
-          },
-          "guid" : "bb895ed6-faa9-4105-a844-4eb3b9250dd3",
-          "id" : 1029624,
-          "name" : "Меркушева Полина Андреевна",
-          "code" : 1029624
-        }; */
-       /*  axios.put(`${__CONFIG__.apiURL}/employees/1029624`, data, config)
-        // TODO: with roleGUID
-          .then(() => {}) */
-      //})
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedRestId !== this.props.selectedRestId) {
-      // TODO: if roles are the same
-      const config = {
-        headers: {
-          'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
-        }
-      };
-      this.props.getRolesByRest();
-      axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
-    // TODO: with roleGUID
-      .then((res) => {
-        const roles = res.data;
-        // console.log(employees);
-        // this.setState({ employees });
-        console.log(res.data, this.props.selectedRestId)
-        this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
-      })
-      .catch((err) => {
-        console.groupCollapsed('Network Error', err);
-      });
+    if (
+      nextProps.selectedRestId !== this.props.selectedRestId ||
+      nextProps.selectedRoleId !== this.props.selectedRoleId
+    ) {
+      if (nextProps.selectedRestId !== this.props.selectedRestId) {
+        console.log('>>')
+        // TODO: if roles are the same
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+          }
+        };
+        this.props.getRolesByRest();
+        axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
+      // TODO: with roleGUID
+        .then((res) => {
+          const roles = res.data.data;
+          console.log(res.data, this.props.selectedRestId)
+          this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
+        })
+        .catch((err) => {
+          console.groupCollapsed('Network Error', err);
+        });
+      }
+      if (nextProps.selectedRoleId !== undefined && nextProps.selectedRoleId !== this.props.selectedRoleId) {
+        this.props.getEmpl();
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+          }
+        };
+        const currentRoleGuid = this.props.roles.getIn([nextProps.selectedRoleId, 'guid']);
+        axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
+        // TODO: with roleGUID
+          .then((res) => {
+            const employees = res.data.data;
+            // console.log(employees);
+            // this.setState({ employees });
+            this.props.successEmpl({ employees });
+          })  
+          //.then(() => {
+            /* let data = {
+              "cardCode" : "100500",
+              "roles" : {
+                  "1010175" : 0,
+                  "1" : 0
+              },
+              "guid" : "bb895ed6-faa9-4105-a844-4eb3b9250dd3",
+              "id" : 1029624,
+              "name" : "Меркушева Полина Андреевна",
+              "code" : 1029624
+            }; */
+            /*  axios.put(`${__CONFIG__.apiURL}/employees/1029624`, data, config)
+            // TODO: with roleGUID
+              .then(() => {}) */
+          //})
+      }
     }
   }
   
@@ -214,7 +228,7 @@ class PrivateView extends Component {
                   isSelected={this.props.selectedRestId === rest.get('guid')}
                   restMap={rest}
                   rolesMap={this.props.roles.valueSeq().filter(
-                    role => { return rest.get('guid') == role.get('restaurantGuid')} // TODO: strict equal?
+                    role => { return rest.get('guid') == role.get('restGuid')} // TODO: strict equal?
                   )}
                 >--</RestaurantInfo>)
               )
@@ -236,11 +250,15 @@ class PrivateView extends Component {
               )}/>
           </Switch>
           {
-            this.props.selectedRestId !== undefined &&
+            this.props.selectedRestId !== undefined && this.props.selectedRoleId !== undefined &&
           <div className="cards-container">
             <div className="cards">
               {
-                this.props.employees.valueSeq().map((emp, index) => {
+                this.props.employees.valueSeq()
+                // .filter((emp) =>
+                //   {emp.hasthis.props.selectedRestId}
+                // )
+                .map((emp, index) => {
                   console.log(emp.get('roles'), this.props.selectedRestId)
                   const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
                   return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 

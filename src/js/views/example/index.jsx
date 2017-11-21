@@ -78,7 +78,9 @@ class ExampleView extends Component {
             <Route 
               path="/:restaurantId/:roleId"
               render={props => (
-                <PrivateView {...this.props} selectedRestId={props.match.params.restaurantId} selectedRoleId={props.match.params.roleId} />
+                <PrivateView {...this.props}
+                  selectedRestId={props.match.params.restaurantId}
+                  selectedRoleId={props.match.params.roleId}/>
             )}/>
             <Route 
               path="/:restaurantId"

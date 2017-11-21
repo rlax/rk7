@@ -40,7 +40,7 @@ export const reducers = {
         return mapById
       }, {}
     )
-    return state.merge({
+    return state.mergeDeep({
       emplById,
       loading: false,
     });
