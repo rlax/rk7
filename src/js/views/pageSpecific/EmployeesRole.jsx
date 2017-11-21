@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { ErrorBoundary } from '../../common/components/Utilities';
 
-class EmployeesEditable extends Component {
+class EmployeesRole extends Component {
   static PropTypes = {
   }
   constructor(props) {
@@ -44,18 +44,21 @@ class EmployeesEditable extends Component {
   }
 
   render() {
-    const { restId } = this.props;
+    const { restId, roleId } = this.props;
     return (
       <div className="employeeCard">
-        {
+        {/* {
           this.state.rolesList.length !== 0 && this.state.rolesList.map(role => (
             <div className="roles-header"><h2 className="role-title">{role.name}</h2><span>{role.id} || {role.guid}</span></div>
           ))
-        }
+        } */}
         <div className="employeeCard-title">Rest - {restId}</div>
+        <div className="roles-header">
+          <h2 className="role-title">{roleId}</h2>
+        </div>
       </div>
     );
   }
 }
 
-export default EmployeesEditable;
+export default EmployeesRole;

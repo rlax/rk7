@@ -10,6 +10,11 @@ export const emplByIdListSelector = createSelector(
   )
 );
 
+export const employeeSelectedSelector = state => {
+  console.log(state.emplo.get('loading'));
+  return state.emplo.get('selectedGuidForEdit')
+};
+
 export const employeeTotalSelector = createSelector(
   emploMapByIdDataSelector,
   (res) => {

@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Link, NavLink } from 'react-router-dom';
+import { Route, Switch, Link, NavLink } from 'react-router-dom';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import { restaListSelector, restaByIdSelector } from '../../redux/selectors/restaSelector';
-import { emplByIdListSelector, employeeTotalSelector, emploMapByIdDataSelector } from '../../redux/selectors/emploSelector';
+import { employeeTotalSelector, emploMapByIdDataSelector, employeeSelectedSelector } from '../../redux/selectors/emploSelector';
 import { rolesData } from '../../redux/selectors/rolesSelector';
 
 import axios from 'axios';
 
 import Form from '../pageSpecific/Form';
-import EmployeeEditForm from '../pageSpecific/EmployeeEditForm';
-import EmployeesEditable from '../pageSpecific/EmployeesEditable';
+import EmployeesRole from '../pageSpecific/EmployeesRole';
+import CardExampleExpandable from '../pageSpecific/CardExampleExpandable';
 
 import { connect } from 'react-redux';
 
@@ -24,7 +24,7 @@ require('../../../style/private.css');
 
 const RestaurantInfo = props => (<li>
   <NavLink 
-    to={`/${props.restMap.get('id')}`}
+    to={`/${props.restMap.get('guid')}`}
     activeStyle={{
       fontStyle: 'italic',
       color: 'grey',
@@ -35,16 +35,26 @@ const RestaurantInfo = props => (<li>
     {/* <div className="restaurantCard-title">{props.restMap.get('id')}</div> */}
     {/* <div className="restaurantCard-row">{props.restMap.get('guid')}</div> */}
     <div className="restaurantCard-row">{props.restMap.get('name')}</div>
-    <div className="restaurantCard-row">Код ресторана: {props.restMap.get('code')}</div>
-    <div className="restaurantRoles">{
-      props.rolesMap.valueSeq().map((role) => {
-        return (
-          <div className="restaurantRoles-row">
-            {role.get('name')}
-          </div>
-        )
-      })
-    }</div>
+    <div className="restaurantCard-row rk-remove">Код ресторана: {props.restMap.get('code')}</div>
+    { props.isSelected &&
+      <div className="restaurantRoles">{
+        props.rolesMap.valueSeq().map((role) => {
+          return (
+            <div className="restaurantRoles-row">
+              <NavLink 
+                to={`/${props.restMap.get('guid')}/${role.get('id')}`} // .../restGuid/roleGuid
+                activeStyle={{
+                  fontStyle: 'bold',
+                  backgroundColor: '#abc',
+                }}
+              >
+               <span>{role.get('name')}</span><span className="rk-remove">{role.get('id')}</span>
+              </NavLink>
+            </div>
+          )
+        })
+      }</div>
+    }
   </NavLink>
 </li>);
 
@@ -59,43 +69,6 @@ const EmployeeCard = props => (
   </div>
 );
 
-const CardExampleExpandable = (props) => {
-  const { empMap } = props;
-  return (
-    <div className="employeeCard">
-      <Card>
-        <CardHeader
-          title={empMap.get('name')}
-          subtitle={empMap.get('code')}
-          actAsExpander={false}
-          showExpandableButton={false}
-        />
-        {/* <CardActions>
-          <FlatButton disabled label="- - -" />
-          <FlatButton disabled label="+ + +" />
-        </CardActions> */}
-        <CardText expandable={false}>
-          <EmployeeEditForm
-            onSubmit={props.saveEmployeeFn}
-            form={`${empMap.get('guid')}`}
-            initialValues={
-              {name: empMap.get('name'), cardCode: empMap.get('cardCode'), guid: empMap.get('guid'), id: empMap.get('id')}
-            }
-            empData={
-              {name: empMap.get('name'), cardCode: empMap.get('cardCode'), guid: empMap.get('guid'), id: empMap.get('id')}
-            }
-          />
-          <div className="employeeCard-row card-header">Cardcode - {empMap.get('cardCode')}</div>
-          <div className="employeeCard-row">name - {empMap.get('name')}</div>
-          <div className="employeeCard-row">guid - {empMap.get('guid')}</div>
-          <div className="employeeCard-row">code - {empMap.get('code')}</div>
-          <div className="employeeCard-row">id - {empMap.get('id')}</div>
-          {/* <div className="employeeCard-row card-meta">Role :: <pre>--^^--</pre></div> */}
-        </CardText>
-      </Card>
-    </div>
-  )};
-
 const mapStateToProps = (state) => {
   return {
     restaurants: restaListSelector(state),
@@ -103,6 +76,7 @@ const mapStateToProps = (state) => {
     employees: emploMapByIdDataSelector(state),
     employeeTotal: employeeTotalSelector(state),
     roles: rolesData(state),
+    ui: {selectedGuidForEdit: employeeSelectedSelector(state)},
   }
 };
 
@@ -126,6 +100,12 @@ class PrivateView extends Component {
         console.groupCollapsed('Login Network Error', err);
       });
     // this.props.successLogin({ auth: true, user: 'Fake Logged User', loading: false });
+  }
+
+  selectEmployee = (guid) => {
+    console.log(guid);
+    
+    this.props.selectEmpl({ guid });
   }
 
   componentDidMount() {
@@ -155,10 +135,7 @@ class PrivateView extends Component {
     // TODO: with roleGUID
       .then((res) => {
         const roles = res.data;
-        // console.log(employees);
-        // this.setState({ employees });
-        console.log(res.data, this.props.selectedRestId)
-        this.props.successRolesByRest({ roles, restId: this.props.selectedRestId });
+        this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
         console.groupCollapsed('Network Error', err);
@@ -193,29 +170,29 @@ class PrivateView extends Component {
       //})
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.selectedRestId !== this.props.selectedRestId) {
-  //     // TODO: if roles are the same
-  //     const config = {
-  //       headers: {
-  //         'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
-  //       }
-  //     };
-  //     this.props.getRolesByRest();
-  //     axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
-  //   // TODO: with roleGUID
-  //     .then((res) => {
-  //       const roles = res.data;
-  //       // console.log(employees);
-  //       // this.setState({ employees });
-  //       console.log(res.data, this.props.selectedRestId)
-  //       this.props.successRolesByRest({ roles, restId: this.props.selectedRestId });
-  //     })
-  //     .catch((err) => {
-  //       console.groupCollapsed('Network Error', err);
-  //     });
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedRestId !== this.props.selectedRestId) {
+      // TODO: if roles are the same
+      const config = {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+        }
+      };
+      this.props.getRolesByRest();
+      axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
+    // TODO: with roleGUID
+      .then((res) => {
+        const roles = res.data;
+        // console.log(employees);
+        // this.setState({ employees });
+        console.log(res.data, this.props.selectedRestId)
+        this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
+      })
+      .catch((err) => {
+        console.groupCollapsed('Network Error', err);
+      });
+    }
+  }
   
 
   render() {
@@ -226,10 +203,10 @@ class PrivateView extends Component {
             {
               !!this.props.restaurants && this.props.restaurants.valueSeq().map(rest => (
                 <RestaurantInfo 
-                  selectedRestId={this.props.selectedRestId}
+                  isSelected={this.props.selectedRestId === rest.get('guid')}
                   restMap={rest}
                   rolesMap={this.props.roles.valueSeq().filter(
-                    role => { return role.get('restId') == this.props.selectedRestId } // TODO: strict equal?
+                    role => { return rest.get('guid') == role.get('restaurantGuid')} // TODO: strict equal?
                   )}
                 >--</RestaurantInfo>)
               )
@@ -237,30 +214,45 @@ class PrivateView extends Component {
           </ul>
         </div>
         <div className="rk-editarea">
-          <Route 
-            path="/:restaurantId"
-            render={props => (
-              <EmployeesEditable restId={this.props.selectedRestId} />
-            )}/>
-          {/* <Form employeeGuid="A1-KUN" /> */}
-          <h1>Все сотрудники</h1>
+          <Switch>
+            <Route 
+              path="/:restaurantId/:roleId"
+              render={props => (
+                <EmployeesRole restId={this.props.selectedRestId} roleId={this.props.selectedRoleId} />
+              )}/>
+            {/* <Form employeeGuid="A1-KUN" /> */}
+            <Route 
+              path="/:restaurantId"
+              render={() => (
+                <h1>Все сотрудники</h1>
+              )}/>
+          </Switch>
+          {
+            this.props.selectedRestId !== undefined &&
           <div className="cards-container">
             <div className="cards">
               {
-                this.props.employees.valueSeq().map((emp, index) => (
-                  <CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} empMap={emp}
+                this.props.employees.valueSeq().map((emp, index) => {
+                  console.log(emp.get('roles'), this.props.selectedRestId)
+                  const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+                  return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
+                    empMap={emp}
+                    isExpandedForEdit={this.props.ui.selectedGuidForEdit === emp.get('guid')}
                     values={{
                       guid: emp.get('guid'),
                       name: emp.get('name'),
                       id: emp.get('id'),
                       code: emp.get('code'),
                       cardCode: emp.get('cardCode'),
+                      role: emp.getIn(['roles', String(curRestForRole)]),
+                      availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid'))
                     }}
-                  />
-                ))
+                  />)
+                })
               }
             </div>
           </div>
+          }
           {/* <CardExampleExpandable /> */}
           {/* <ul>
             <li>lorem</li>
