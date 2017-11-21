@@ -3,10 +3,12 @@ import { Map } from 'immutable';
 
 const GET_EMPL = 'app/emplo/GET_EMPL';
 const SUCCESS_EMPL = 'app/emplo/SUCCESS_EMPL';
+const SELECT_EMPL = 'app/emplo/SELECT_EMPL';
 
 export const constants = {
   GET_EMPL,
   SUCCESS_EMPL,
+  SELECT_EMPL,
 };
 
 // ------------------------------------
@@ -16,10 +18,12 @@ export const getEmpl = createAction(GET_EMPL);
 export const successEmpl = createAction(SUCCESS_EMPL, (result) => {
   return result
 });
+export const selectEmpl = createAction(SELECT_EMPL, (res) => (res));
 
 export const actions = {
   getEmpl,
   successEmpl,
+  selectEmpl,
 };
 
 export const reducers = {
@@ -41,6 +45,10 @@ export const reducers = {
       loading: false,
     });
   },
+  [SELECT_EMPL]: (state, { payload }) => state.merge({
+    // console.log(payload);
+    selectedGuidForEdit: payload.guid,
+  }),
 }
 
 export const initialState = () =>
@@ -48,6 +56,7 @@ export const initialState = () =>
     empl: [],
     emplById: new Map(),
     loading: false,
+    selectedGuidForEdit: '',
   })
 
 export default handleActions(reducers, initialState());
