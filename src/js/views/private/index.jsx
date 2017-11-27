@@ -6,6 +6,7 @@ import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import { restaListSelector, restaByIdSelector } from '../../redux/selectors/restaSelector';
 import { employeeTotalSelector, emploMapByIdDataSelector, employeeSelectedSelector } from '../../redux/selectors/emploSelector';
 import { rolesData } from '../../redux/selectors/rolesSelector';
+import { ErrorBoundary } from '../../common/components/Utilities';
 
 import axios from 'axios';
 
@@ -14,6 +15,7 @@ import EmployeesRole from '../pageSpecific/EmployeesRole';
 import CardExampleExpandable from '../pageSpecific/CardExampleExpandable';
 
 import { connect } from 'react-redux';
+import { getRolesByRest } from '../../redux/modules/roles';
 
 // import { actions as exampleActions } from '../../redux/modules/example';
 // import { actions as restaActions } from '../../redux/modules/resta';
@@ -136,6 +138,29 @@ class PrivateView extends Component {
         const restaurantsList = res.data.data;
         // this.setState({ restaurantsList });
         this.props.successResta({ restaurantsList });
+        return restaurantsList
+      })
+      .then((restaurantsList) => {
+        let axiosFnArray = [];
+        restaurantsList.forEach((rest) => {
+          const getRolesForRest = (resta) => {
+            axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${resta.guid}`, config)
+            .then((res) => {
+              const roles = res.data;
+              this.props.successRolesByRest({ roles, restGuid: resta.guid });
+            })
+            .catch((err) => {
+              console.groupCollapsed('Network Error', err);
+            });
+          }
+          axiosFnArray.push(getRolesForRest(rest));
+        });
+        console.log(axiosFnArray);
+        return axios.all(axiosFnArray)
+          .then((res) => {
+            let temp = res.map(r => r.data);
+            console.log(temp);
+          })
       })
       // .catch((err) => {
       //   console.groupCollapsed('Network Error', err);
@@ -146,7 +171,7 @@ class PrivateView extends Component {
       axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${this.props.selectedRestId}`, config)
     // TODO: with roleGUID
       .then((res) => {
-        const roles = res.data.data;
+        const roles = res.data;
         this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
@@ -172,7 +197,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
       // TODO: with roleGUID
         .then((res) => {
-          const roles = res.data.data;
+          const roles = res.data;
           console.log(res.data, this.props.selectedRestId)
           this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
         })
@@ -191,7 +216,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
         // TODO: with roleGUID
           .then((res) => {
-            const employees = res.data.data;
+            const employees = res.data;
             // console.log(employees);
             // this.setState({ employees });
             this.props.successEmpl({ employees });
@@ -218,8 +243,10 @@ class PrivateView extends Component {
   
 
   render() {
+    try{
     return (
       <div className="rk-private">
+      <ErrorBoundary>
         <div className="rk-restaurants-list">
           <ul>
             {
@@ -271,7 +298,8 @@ class PrivateView extends Component {
                       code: emp.get('code'),
                       cardCode: emp.get('cardCode'),
                       role: emp.getIn(['roles', String(curRestForRole)]),
-                      availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid'))
+                      availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid')),
+                      otherRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId !== role.get('restGuid')),
                     }}
                   />)
                 })
@@ -286,8 +314,10 @@ class PrivateView extends Component {
             <li>3</li>
           </ul> */}
         </div>
+        </ErrorBoundary>
       </div>
     )
+  } catch(e) {console.log(e)}
   }
 }
 

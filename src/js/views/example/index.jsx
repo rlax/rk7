@@ -14,7 +14,6 @@ import { exampleSelector } from '../../redux/selectors/exampleSelector';
 import { Example, ExampleWithError } from '../../common/components/Example';
 import { PrivateRoute, Login } from '../../common/components/Login';
 import { default as PrivateView } from '../private';
-import { ErrorBoundary } from '../../common/components/Utilities';
 
 require('../../../style/index.css');
 
@@ -67,6 +66,7 @@ class ExampleView extends Component {
   render() {
     return (
       <div>
+        
         {
           this.props.auth &&
           <Switch>
