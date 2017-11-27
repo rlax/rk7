@@ -2,7 +2,8 @@ import React from 'react'
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { TextField, SelectField } from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
-import MenuItem from 'material-ui/MenuItem'
+import MenuItem from 'material-ui/MenuItem';
+import Divider from 'material-ui/Divider';
 import { connect } from 'react-redux';
 
 import { required, integer } from '../../utility/validation';
@@ -30,8 +31,14 @@ let EmployeeEditForm = (props) => {
             hintText="Роль"
             floatingLabelText="Роль"
           >
-            {empData.availableRoles.map((role) => (<MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />))}
+            {empData.availableRoles.map((role) => (
+              <MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+            )}
             <MenuItem value="0" primaryText="Сбросить роль" />
+            <Divider />
+            {empData.otherRoles.map((role) => (
+              <MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+            )}
           </Field>
         </div>
       </div>

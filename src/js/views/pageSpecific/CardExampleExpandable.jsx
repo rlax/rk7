@@ -70,7 +70,7 @@ class CardExampleExpandable extends Component {
               }
               empData={
                 {name: empMap.get('name'), cardCode: empMap.get('cardCode'), code: empMap.get('code'), guid: empMap.get('guid'), id: empMap.get('id'),
-                availableRoles: values.availableRoles}
+                availableRoles: values.availableRoles, otherRoles: values.otherRoles}
               }
             />
             <div className="employeeCard-row card-header">Cardcode - {empMap.get('cardCode')}</div>
