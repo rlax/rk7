@@ -19,7 +19,6 @@ require('../../../style/index.css');
 
 const mapStateToProps = (state) => {
   const token = localStorage.getItem('rk7token');
-  console.log(token);
   return {
     example: exampleSelector(state),
     auth: !!token ? true : state.auth.get('auth'),
@@ -43,13 +42,13 @@ class ExampleView extends Component {
 
   componentDidMount() {
     // this.props.getAwesomeCode();
-    console.log(__CONFIG__);
+    // console.info(__CONFIG__);
     const config = {
       // headers: {
       //   // 'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
       // }
     };
-    console.log('Auth >>> with token', localStorage.getItem('rk7token'));
+    console.info('Auth >>> with token', localStorage.getItem('rk7token'));
     /* axios.get(`${__CONFIG__.apiURL}/reactjs.json`, config)
       .then((res) => { 
         const posts = res.data.data.children.map(obj => obj.data);

@@ -184,8 +184,7 @@ class Form extends Component {
 
 const selector = formValueSelector('form-employee');
 
-Form = connect(state => {
-  console.log(state);
+Form = connect((state) => {
   return {
     numPizzas: selector(state, 'pizzas'),
   }

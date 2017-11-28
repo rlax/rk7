@@ -45,7 +45,6 @@ class Login extends React.Component {
   }
 
   login = (values) => {
-    console.log(values);
     this.props.postLogin();
     // let data = {
     //   "user": "Сергеева Александра Анатольевна",
@@ -60,7 +59,7 @@ class Login extends React.Component {
         this.props.successLogin({ user: data.user, fakeJWT });
       })
       .catch((err) => {
-        console.groupCollapsed('Login Network Error', err);
+        console.warn('Login Network Error', err);
         // const fakeJWT = posts.length + Math.random();
         // localStorage.setItem('rk7token', fakeJWT);
         // this.props.successLogin({ user: 'Logged User', fakeJWT });

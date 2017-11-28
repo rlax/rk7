@@ -13,7 +13,6 @@ export const rolesData = state => state.roles.get('rolesById');
 // export const employeeTotalSelector = createSelector(
 //   emploMapByIdDataSelector,
 //   (res) => {
-//     console.log(res);
 //     return res.size;
 //   }
 // )

@@ -28,7 +28,6 @@ export const reducers = {
       loading: true,
     }),
   [SUCCESS_ROLES_BY_REST]: (state, { payload }) => {
-    console.log(payload);
     const rolesById = payload.roles.reduce(
       (map,rest) => {
         let mapById = Object.assign({}, map);
