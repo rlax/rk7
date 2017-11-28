@@ -4,11 +4,13 @@ import { Map } from 'immutable';
 const GET_EMPL = 'app/emplo/GET_EMPL';
 const SUCCESS_EMPL = 'app/emplo/SUCCESS_EMPL';
 const SELECT_EMPL = 'app/emplo/SELECT_EMPL';
+const UPDATE_EMPL = 'app/emplo/UPDATE_EMPL';
 
 export const constants = {
   GET_EMPL,
   SUCCESS_EMPL,
   SELECT_EMPL,
+  UPDATE_EMPL,
 };
 
 // ------------------------------------
@@ -19,11 +21,13 @@ export const successEmpl = createAction(SUCCESS_EMPL, (result) => {
   return result
 });
 export const selectEmpl = createAction(SELECT_EMPL, (res) => (res));
+export const updateEmpl = createAction(UPDATE_EMPL, (res) => (res));
 
 export const actions = {
   getEmpl,
   successEmpl,
   selectEmpl,
+  updateEmpl,
 };
 
 export const reducers = {
@@ -32,23 +36,24 @@ export const reducers = {
       loading: true,
     }),
   [SUCCESS_EMPL]: (state, { payload }) => {
-    console.log(payload);
     const emplById = payload.employees.reduce(
       (map,rest) => {
         let mapById = Object.assign({}, map);
         mapById[rest.id] = rest
         return mapById
       }, {}
-    )
+    );
     return state.mergeDeep({
       emplById,
       loading: false,
     });
   },
   [SELECT_EMPL]: (state, { payload }) => state.merge({
-    // console.log(payload);
     selectedGuidForEdit: payload.guid,
   }),
+  [UPDATE_EMPL]: (state, { payload }) => {
+    return state.mergeDeep({})
+  },
 }
 
 export const initialState = () =>

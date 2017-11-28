@@ -32,12 +32,14 @@ let EmployeeEditForm = (props) => {
             floatingLabelText="Роль"
           >
             {empData.availableRoles.map((role) => (
-              <MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
             )}
             <MenuItem value="0" primaryText="Сбросить роль" />
-            <Divider />
+            <Divider inset />
+            <span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span>
+            <Divider inset />
             {empData.otherRoles.map((role) => (
-              <MenuItem value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
             )}
           </Field>
         </div>
