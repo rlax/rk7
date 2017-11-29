@@ -5,17 +5,22 @@ import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import { connect } from 'react-redux';
-
 import { required, integer } from '../../utility/validation';
+require('../../../style/emplForm.css');
+
+let fieldStyle = { width: '160px'};
+let disabledFieldStyle = { width: '160px', height: '72px'};
 
 let EmployeeEditForm = (props) => {
   const { handleSubmit, pristine, reset, submitting, initialValues, form, empData } = props
   return (
     <form onSubmit={handleSubmit}>
-      <div>
+      <div className="employeeCard__field-wrap">
+        <label>Код карты</label>
         <div>
           <Field
             name="cardCode"
+            style={fieldStyle}
             component={TextField}
             hintText="Код карты"
             floatingLabelText="Код карты - число"
@@ -23,10 +28,12 @@ let EmployeeEditForm = (props) => {
           />
         </div>
       </div>
-      <div>
+      <div className="employeeCard__field-wrap">
+        <label>Роль</label>
         <div>
           <Field
             name="role"
+            // style={fieldStyle}
             component={SelectField}
             hintText="Роль"
             floatingLabelText="Роль"
@@ -44,55 +51,61 @@ let EmployeeEditForm = (props) => {
           </Field>
         </div>
       </div>
-      <div>
-        {/* <label>Код карты</label> */}
+      <div className="employeeCard__field-wrap">
+        <label>Имя</label>
         <div>
           <Field
             name="name"
+            style={disabledFieldStyle}
             component={TextField}
             disabled
             hintText="Имя"
           />
         </div>
       </div>
-      <div>
-        {/* <label>Код карты</label> */}
+      <div className="employeeCard__field-wrap">
+        <label>Внутренний ID</label>
         <div>
           <Field
             name="id"
+            style={disabledFieldStyle}
             component={TextField}
             disabled
-            hintText="---"
+            hintText="ID"
           />
         </div>
       </div>
-      <div>
-        {/* <label>Код карты</label> */}
+      <div className="employeeCard__field-wrap">
+        <label>Код сотрудника</label>
         <div>
           <Field
             name="code"
+            style={disabledFieldStyle}
             component={TextField}
             disabled
             hintText="Код"
           />
         </div>
       </div>
-      <div>
-        {/* <label>Код карты</label> */}
+      <div className="employeeCard__field-wrap">
+        <label>Код карты</label>
         <div>
           <Field
             name="guid"
+            style={disabledFieldStyle}
             component={TextField}
             disabled
             hintText="Идентификатор"
           />
         </div>
       </div>
-      <div>
-        <FlatButton type="submit" disabled={pristine || submitting} label="Изменить" />
-        {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
-          Сбросить поля
-        </button> */}
+      <div className="employeeCard__field-wrap">
+        <div>
+          <FlatButton type="submit" disabled={pristine || submitting} label="Изменить" />
+          {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
+            Сбросить поля
+          </button> */}
+        </div>
       </div>
     </form>
   )

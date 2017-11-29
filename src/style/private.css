@@ -88,7 +88,7 @@ li a:hover {
 	position: relative;
 	margin-bottom: 20px; 
   padding-bottom: 30px;
-  width: 250px;
+  width: 100%;
   background: #eff1e5;
   border: 1px dashed #d4d4d4;
 	color: #363636; //the whole content of the card becomes linked, so this will give the text a "norma;" appearance
@@ -118,7 +118,15 @@ li a:hover {
 	}
 	.card-summary {
 		padding: 5% 5% 3% 5%;
-	}
+  }
+  &-subheader {
+    width: 100%;
+  }
+  &-row {
+    display: inline-block;
+    padding: 5px;
+    border-left: 2px solid #ccc;
+  }
 	.card-header {
     position: relative;
     border-bottom: 1px solid #fdfcfc;

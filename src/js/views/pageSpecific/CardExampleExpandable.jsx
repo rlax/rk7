@@ -43,18 +43,26 @@ class CardExampleExpandable extends Component {
     return (
       <div className="employeeCard">
         <Card expanded={isExpandedForEdit}>
-          <Toggle
-            toggled={isExpandedForEdit}
-            onToggle={()=>this.props.selectEmployeeFn(empMap.get('guid'))}
-            labelPosition="right"
-            label="Редактировать"
-          />
           <CardHeader
             title={empMap.get('name')}
             subtitle={empMap.get('code')}
             actAsExpander={false}
             showExpandableButton={false}
-          />
+          >
+            <div className="employeeCard-subheader">
+              <div className="employeeCard-row">Cardcode - {empMap.get('cardCode')}</div>
+              <div className="employeeCard-row">name - {empMap.get('name')}</div>
+              <div className="employeeCard-row">guid - {empMap.get('guid')}</div>
+              <div className="employeeCard-row">code - {empMap.get('code')}</div>
+              <div className="employeeCard-row">id - {empMap.get('id')}</div>          
+            </div>  
+            <Toggle
+              toggled={isExpandedForEdit}
+              onToggle={()=>this.props.selectEmployeeFn(empMap.get('guid'))}
+              labelPosition="right"
+              label="Редактировать"
+            />
+          </CardHeader>
           {/* <CardActions>
             <FlatButton disabled label="- - -" />
             <FlatButton disabled label="+ + +" />
@@ -73,11 +81,6 @@ class CardExampleExpandable extends Component {
                 availableRoles: values.availableRoles, otherRoles: values.otherRoles}
               }
             />
-            <div className="employeeCard-row card-header">Cardcode - {empMap.get('cardCode')}</div>
-            <div className="employeeCard-row">name - {empMap.get('name')}</div>
-            <div className="employeeCard-row">guid - {empMap.get('guid')}</div>
-            <div className="employeeCard-row">code - {empMap.get('code')}</div>
-            <div className="employeeCard-row">id - {empMap.get('id')}</div>
             {/* <div className="employeeCard-row card-meta">Role :: <pre>--^^--</pre></div> */}
           </CardText>
         </Card>
