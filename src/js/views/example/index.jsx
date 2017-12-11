@@ -19,9 +19,11 @@ require('../../../style/index.css');
 
 const mapStateToProps = (state) => {
   const token = localStorage.getItem('rk7token');
+  const authError = state.auth.get('error');
   return {
     example: exampleSelector(state),
     auth: !!token ? true : state.auth.get('auth'),
+    authError: !!authError ? authError : false,
     user: state.auth.get('user'),
   }
 };
@@ -91,6 +93,10 @@ class ExampleView extends Component {
         {
           !this.props.auth &&
           <div className="rk-hint">
+            { 
+              !!this.props.authError &&
+              <span>{this.props.authError}<br /></span>
+            }
             <Link to="/login">Страница логина</Link>
           </div>
         }

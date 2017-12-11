@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth.get('auth'),
     user: state.auth.get('user'),
+    error: state.auth.get('error'),
   }
 };
 
@@ -57,32 +58,37 @@ class Login extends React.Component {
         const fakeJWT = res.data.data;
         localStorage.setItem('rk7token', fakeJWT);
         this.props.successLogin({ user: data.user, fakeJWT });
+        this.setState({ redirectToReferrer: true });
       })
       .catch((err) => {
-        console.warn('Login Network Error', err);
+        console.warn('Login Network Error', err.response);
         // const fakeJWT = posts.length + Math.random();
-        // localStorage.setItem('rk7token', fakeJWT);
-        // this.props.successLogin({ user: 'Logged User', fakeJWT });
+        localStorage.removeItem('rk7token');
+        this.props.errorLogin({ user: 'Logged User', error: err.response });
       });
     // this.props.successLogin({ auth: true, user: 'Fake Logged User', loading: false });
-    this.setState({ redirectToReferrer: true });
   }
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { auth } = this.props;
+    const { auth, error } = this.props;
     const { redirectToReferrer } = this.state;
-    
-    if (auth || redirectToReferrer) {
+
+    if (auth) {
       return (
-        <Redirect to={from} />
+        <Redirect to={'/'} />
       )
     }
-    
+
     return (
       <div>
-        <p>Для редактирования требуется войти, используя ваше имя и пароль {from.pathname}</p>
+        <p>Для редактирования требуется войти, используя ваше имя и пароль</p>{/* from.pathname */}
         <LoginForm onSubmit={this.login} />
+        { !!error &&
+          <div>
+            {error}
+          </div>
+        }
         {/* <button onClick={this.login}>Log in</button> */}
       </div>
     )
