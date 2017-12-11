@@ -38,10 +38,10 @@ export const reducers = {
       error: '',
       loading: false,
     }),
-  [ERROR_LOGIN]: state =>
+  [ERROR_LOGIN]: (state, { payload }) =>
     state.merge({
       auth: false,
-      error: 'Ошибка аутентификации/неправильный токен. Неправильный логин/пароль или сетевая ошибка при входе. Попробуйте еще раз.',
+      error: !!payload.error ? payload.error : 'Ошибка аутентификации/неправильный токен. Неправильный логин/пароль или сетевая ошибка при входе. Попробуйте еще раз.',
       loading: false,
     }),
 }

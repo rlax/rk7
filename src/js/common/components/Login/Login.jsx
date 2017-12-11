@@ -54,11 +54,16 @@ class Login extends React.Component {
     const data = values;
     // const config = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
     axios.post(`${__CONFIG__.apiURL}/login`, data) // TODO: config
-      .then((res) => { 
-        const fakeJWT = res.data.data;
-        localStorage.setItem('rk7token', fakeJWT);
-        this.props.successLogin({ user: data.user, fakeJWT });
-        this.setState({ redirectToReferrer: true });
+      .then((res) => {
+        console.log(res);
+        if (!!res.data.error) {
+          this.props.errorLogin({ user: 'Logged User', error: res.data.error.desc });
+        } else {
+          const fakeJWT = res.data.data;
+          localStorage.setItem('rk7token', fakeJWT);
+          this.props.successLogin({ user: data.user, fakeJWT });
+          this.setState({ redirectToReferrer: true });
+        }
       })
       .catch((err) => {
         console.warn('Login Network Error', err.response);

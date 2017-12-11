@@ -116,7 +116,7 @@ class PrivateView extends Component {
           const getRolesForRest = (resta) => {
             axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${resta.guid}`, config)
             .then((res) => {
-              const roles = res.data;
+              const roles = res.data.data;
               this.props.successRolesByRest({ roles, restGuid: resta.guid });
             })
             .catch((err) => {
@@ -141,7 +141,7 @@ class PrivateView extends Component {
       axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${this.props.selectedRestId}`, config)
     // TODO: with roleGUID
       .then((res) => {
-        const roles = res.data;
+        const roles = res.data.data;
         this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
@@ -166,7 +166,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
       // TODO: with roleGUID
         .then((res) => {
-          const roles = res.data;
+          const roles = res.data.data;
           console.info('private >> cWRP: new selectedRestId');
           this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
         })
@@ -185,7 +185,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
         // TODO: with roleGUID
           .then((res) => {
-            const employees = res.data;
+            const employees = res.data.data;
             // console.log(employees);
             // this.setState({ employees });
             this.props.successEmpl({ employees });
@@ -210,6 +210,10 @@ class PrivateView extends Component {
     }
   }
 
+  componentWillUnmount() {
+    
+  }
+
   saveEmployee = (empMap, values) => {
     const config = {
       headers: {
@@ -217,6 +221,7 @@ class PrivateView extends Component {
       }
     };
     let currentRestId = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+    const currentRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid']);
     let prevRoles = empMap.get('roles');
     let roleObj = prevRoles.toObject();
     roleObj[currentRestId] = values.role;
@@ -224,11 +229,24 @@ class PrivateView extends Component {
     const putValues = (
       ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
     )(values);
-    this.props.updateEmpl(putValues);
+    // this.props.updateEmpl(putValues);
     axios.put(`${__CONFIG__.apiURL}/employees/${putValues.guid}`, putValues, config)
-      // .then((res)=>{
-      //   this.props.updateEmpl(res);
-      // })
+      .then((res)=>{
+        this.props.updateEmpl(res.data.data);
+      })
+      // .then(() =>
+      //   axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
+      // // TODO: with roleGUID
+      //     .then((res) => {
+      //       const employees = res.data.data;
+      //       // console.log(employees);
+      //       // this.setState({ employees });
+      //       this.props.successEmpl({ employees });
+      //     })  
+      // )
+      // .then(
+      //   () => this.forceUpdate()
+      // )  
       .catch((err) => {
         console.warn('PUT employee network error:', err);
       });
