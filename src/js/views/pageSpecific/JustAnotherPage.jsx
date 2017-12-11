@@ -8,7 +8,7 @@ const mapDispatchToProps = { ...authActions };
 class JustAnotherPage extends Component {
   componentDidMount() {
     localStorage.removeItem('rk7token');
-    this.props.errorLogin({ user: 'Logged User', error: 'logout' });
+    this.props.errorLogin({ user: 'Logged User', error: 'Вы вышли из сеанса редактирования. Выберите другого пользователя...' });
   }
   render() {
     return (
