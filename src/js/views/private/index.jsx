@@ -244,6 +244,32 @@ class PrivateView extends Component {
   } 
 
   render() {
+    let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
+    if (!!this.props.selectedRestId) {
+      selectedRestSimpleId = this.props.restaurants.valueSeq()
+        .find(rest => rest.get('guid') === this.props.selectedRestId )
+        .get('id')
+        .toString();
+    } else { selectedRestSimpleId = '' };
+    if (!!this.props.selectedRoleId) {
+      selectedRoleIdNum = parseInt(this.props.selectedRoleId);
+      selectedRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid'])
+      // .toString();
+    } else  { selectedRoleGuid = '' };
+    console.log(selectedRestSimpleId, selectedRoleIdNum);
+    filteredEmpl = this.props.employees
+      .filter((empl) => {
+      // console.log(empl.get('roles'));
+        let roles = empl.get('roles');
+        if (selectedRestSimpleId !== '') {
+          if (selectedRoleGuid !== '') {
+            return (roles.has(selectedRestSimpleId) && roles.contains(selectedRoleIdNum));
+          } else {
+            return (roles.has(selectedRestSimpleId));
+          } 
+        }
+      });
+    console.log(filteredEmpl);
     return (
       <div className="rk-private">
       <ErrorBoundary>
@@ -278,11 +304,12 @@ class PrivateView extends Component {
               )}/>
           </Switch>
           {
-            this.props.selectedRestId !== undefined && this.props.selectedRoleId !== undefined &&
+            this.props.selectedRestId !== undefined &&
+            // this.props.selectedRoleId !== undefined &&
           <div className="cards-container">
             <div className="cards">
               {
-                this.props.employees.valueSeq()
+                filteredEmpl.valueSeq()
                 // .filter((emp) =>
                 //   {emp.hasthis.props.selectedRestId}
                 // )

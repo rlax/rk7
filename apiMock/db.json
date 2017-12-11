@@ -1,7 +1,7 @@
 {
   "login": {
-    "user": "1",
-    "pass": "2"
+    "user": "123",
+    "pass": "123"
   },
   "restaurants": {
     "data": [
@@ -66,45 +66,45 @@
       "restaurantGuid": "fc1bbb36-4d7f-4ef9-80c2-33b78adbdb6a"
     },
     {
-      "guid": "5ed11406-bee3-4e5a-9b75-dc5604be11ee",
+      "guid": "25ed11406-bee3-4e5a-9b75-dc5604be11ee",
       "id": 2011733,
       "name": "Кассиры",
       "code": 132,
       "restaurantGuid": "5f7a9b4f-bd3b-449a-8318-a86bdaee6ee7"
     },
     {
-      "guid": "9a4184ce-34ee-4ff3-b768-9c5b53fc5041",
+      "guid": "29a4184ce-34ee-4ff3-b768-9c5b53fc5041",
       "id": 2011734,
       "name": "Менеджер",
       "code": 133,
       "restaurantGuid": "5f7a9b4f-bd3b-449a-8318-a86bdaee6ee7"
     },
     {
-      "guid": "37adf01f-ce17-4cae-9828-b1afe29d4a51",
+      "guid": "237adf01f-ce17-4cae-9828-b1afe29d4a66",
       "id": 2038891,
       "name": "Работники",
-      "code": 1038891,
+      "code": 2038891,
       "restaurantGuid": "5f7a9b4f-bd3b-449a-8318-a86bdaee6ee7"
     },
     {
-      "guid": "5ed11406-bee3-4e5a-9b75-dc5604be11ee",
+      "guid": "35ed11406-bee3-4e5a-9b75-dc5604be11ee",
       "id": 3011733,
       "name": "Кассиры",
-      "code": 132,
+      "code": 332,
       "restaurantGuid": "729f46e9-cc88-4d36-aded-6c4a1ed57754"
     },
     {
-      "guid": "9a4184ce-34ee-4ff3-b768-9c5b53fc5041",
+      "guid": "39a4184ce-34ee-4ff3-b768-9c5b53fc5041",
       "id": 3011734,
       "name": "Менеджер",
-      "code": 133,
+      "code": 333,
       "restaurantGuid": "729f46e9-cc88-4d36-aded-6c4a1ed57754"
     },
     {
-      "guid": "37adf01f-ce17-4cae-9828-b1afe29d4a51",
+      "guid": "337adf01f-ce17-4cae-9828-b1afe29d4a51",
       "id": 3038891,
       "name": "Работники",
-      "code": 1038891,
+      "code": 3038891,
       "restaurantGuid": "729f46e9-cc88-4d36-aded-6c4a1ed57754"
     }
   ],
@@ -114,23 +114,29 @@
       "cardCode": "100277",
       "guid": "8e6cd3a0-2843-4333-a0a1-9ff957738932",
       "id": 1034232,
-      "role": 1038891
+      "restaurantGuid": "37adf01f-ce17-4cae-9828-b1afe29d4a51",
+      "roles": {
+        "1": "1038891"
+      },
+      "roleGuid": "37adf01f-ce17-4cae-9828-b1afe29d4a51"
     },
     {
       "cardCode": "77456",
       "guid": "5b5f9881-ae38-481b-9b06-261d258f97f1",
       "id": 1039570,
       "name": "Иванова Юлия Сергеевна",
+      "roleGuid": "237adf01f-ce17-4cae-9828-b1afe29d4a66",
       "roles": {
-        "1": "0",
+        "1": 1038891,
         "1010175": 2038891
       }
     },
     {
       "cardCode": "100275",
       "roles": {
-        "1010175": 1011734
+        "1010175": 2011734
       },
+      "roleGuid": "29a4184ce-34ee-4ff3-b768-9c5b53fc5041",
       "guid": "37f314e1-41fa-447f-b4dc-854ce567e1fd",
       "id": 1053118,
       "name": "Воронцов Владимир Сергеевич",
@@ -139,8 +145,9 @@
     {
       "cardCode": "100282",
       "roles": {
-        "1010175": 1011734
+        "1010175": 2011734
       },
+      "roleGuid": "29a4184ce-34ee-4ff3-b768-9c5b53fc5041",
       "guid": "fe6ff349-91b9-4546-93d9-65c0a2370d4d",
       "id": 1091297,
       "name": "Леонтьев Евгений Владимирович",
@@ -148,8 +155,9 @@
     },
     {
       "cardCode": "",
+      "roleGuid": "29a4184ce-34ee-4ff3-b768-9c5b53fc5041",
       "roles": {
-        "1010175": 1011734
+        "1010175": 2011734
       },
       "guid": "dba6fe48-bb70-4ec3-9ba3-591f1dd80614",
       "id": 1103594,
