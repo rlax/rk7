@@ -105,7 +105,8 @@ class PrivateView extends Component {
 
     axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
       .then((res) => { 
-        const restaurantsList = res.data.data;
+        const restaurantsList = res.data.data.data;
+        console.log(restaurantsList);
         // this.setState({ restaurantsList });
         this.props.successResta({ restaurantsList });
         return restaurantsList
@@ -220,15 +221,35 @@ class PrivateView extends Component {
         'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
       }
     };
-    let currentRestId = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+    const currentRestId = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
     const currentRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid']);
-    let prevRoles = empMap.get('roles');
-    let roleObj = prevRoles.toObject();
-    roleObj[currentRestId] = values.role;
-    values.roles = roleObj;
-    const putValues = (
-      ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
-    )(values);
+    let restWithSelectedRoleGuid;
+    if ( values.role !== 0 && values.role !== '0' ) {
+      restWithSelectedRoleGuid = this.props.roles.valueSeq().find(role => values.role === role.get('id')).get('restGuid');
+    } else {
+      restWithSelectedRoleGuid = this.props.selectedRestId;
+    }
+    const restWithSelectedRoleId = this.props.restaurants.valueSeq().find(rest => restWithSelectedRoleGuid === rest.get('guid')).get('id');
+    console.log(empMap, values, restWithSelectedRoleGuid, this.props.selectedRestId);
+    let putValues = {};
+    if ( restWithSelectedRoleGuid !== this.props.selectedRestId ) {
+      let prevRoles = empMap.get('roles');
+      let roleObj = prevRoles.toObject();
+      roleObj[restWithSelectedRoleId] = values.role;
+      delete roleObj[currentRestId];
+      values.roles = roleObj;
+      putValues = (
+        ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
+      )(values);
+    } else {
+      let prevRoles = empMap.get('roles');
+      let roleObj = prevRoles.toObject();
+      roleObj[currentRestId] = values.role;
+      values.roles = roleObj;
+      putValues = (
+        ({ cardCode, code, guid, id, name, roles }) => ({cardCode, code, guid, id, name, roles})
+      )(values);
+    }
     // this.props.updateEmpl(putValues);
     axios.put(`${__CONFIG__.apiURL}/employees/${putValues.guid}`, putValues, config)
       .then((res)=>{
@@ -331,20 +352,27 @@ class PrivateView extends Component {
                 // .filter((emp) =>
                 //   {emp.hasthis.props.selectedRestId}
                 // )
-                .map((emp, index) => {
-                  const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
-                  return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
-                    empMap={emp}
-                    isExpandedForEdit={this.props.ui.selectedGuidForEdit === emp.get('guid')}
-                    values={{
-                      guid: emp.get('guid'),
-                      name: emp.get('name'),
-                      id: emp.get('id'),
-                      code: emp.get('code'),
-                      cardCode: emp.get('cardCode'),
-                      role: emp.getIn(['roles', String(curRestForRole)]),
-                      availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid')),
-                      otherRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId !== role.get('restGuid')),
+                  .map((emp, index) => {
+                    const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+                    return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
+                      empMap={emp}
+                      isExpandedForEdit={this.props.ui.selectedGuidForEdit === emp.get('guid')}
+                      values={{
+                        guid: emp.get('guid'),
+                        name: emp.get('name'),
+                        id: emp.get('id'),
+                        code: emp.get('code'),
+                        cardCode: emp.get('cardCode'),
+                        role: emp.getIn(['roles', String(curRestForRole)]),
+                        availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid')),
+                        otherRoles: this.props.roles.valueSeq()
+                          .filter(role => this.props.selectedRestId !== role.get('restGuid'))
+                          .map((role) => {
+                            return role.set(
+                              'restaurantName', // key
+                              this.props.restaurants.valueSeq().find(rest => role.get('restGuid') === rest.get('guid')).get('name') // value
+                            );
+                          }),
                     }}
                   />)
                 })

@@ -45,8 +45,13 @@ let EmployeeEditForm = (props) => {
             <Divider inset />
             <span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span>
             <Divider inset />
-            {empData.otherRoles.map((role) => (
-              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+            {empData.otherRoles
+            .sortBy(role => role.get('restaurantGuid'))
+            .map((role) => (
+                <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`}>
+                  <span className="rk-select-hint">{role.get('restaurantName')}</span>
+                </MenuItem>
+            )
             )}
           </Field>
         </div>
