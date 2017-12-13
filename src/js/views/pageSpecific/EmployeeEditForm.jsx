@@ -24,7 +24,7 @@ let EmployeeEditForm = (props) => {
             component={TextField}
             hintText="Код карты"
             floatingLabelText="Код карты - число"
-            validate={[required, integer]}
+            validate={[integer]}
           />
         </div>
       </div>

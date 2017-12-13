@@ -105,7 +105,7 @@ class PrivateView extends Component {
 
     axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
       .then((res) => { 
-        const restaurantsList = res.data.data.data;
+        const restaurantsList = res.data.data;
         console.log(restaurantsList);
         // this.setState({ restaurantsList });
         this.props.successResta({ restaurantsList });
@@ -286,7 +286,7 @@ class PrivateView extends Component {
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
     if (!!this.props.selectedRestId) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
-        .find(rest => rest.get('guid') === this.props.selectedRestId )
+        .find(rest => { if (!!rest) {rest.get('guid') === this.props.selectedRestId} })
         .get('id')
         .toString();
     } else { selectedRestSimpleId = '' };
