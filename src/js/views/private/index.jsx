@@ -284,7 +284,8 @@ class PrivateView extends Component {
 
   render() {
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
-    if (!!this.props.selectedRestId) {
+    console.log(this.props.restaurants)
+    if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
         .find(rest => { if (!!rest) {rest.get('guid') === this.props.selectedRestId} })
         .get('id')
