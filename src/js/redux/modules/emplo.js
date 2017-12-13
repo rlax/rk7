@@ -52,10 +52,8 @@ export const reducers = {
     selectedGuidForEdit: payload.guid,
   }),
   [UPDATE_EMPL]: (state, { payload }) => {
-    const newEmpl = {[payload.id]: payload}
-    return state.mergeDeep({
-      emplById: newEmpl,
-    })
+    const newEmpl = {[payload.id]: payload};
+    return state.setIn(['emplById', `${payload.id}`], payload)
   },
 }
 
