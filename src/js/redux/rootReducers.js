@@ -14,5 +14,5 @@ export default combineReducers({
   resta,
   emplo,
   roles,
-  form: formReducer
+  form: formReducer,
 });
