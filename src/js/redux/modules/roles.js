@@ -28,19 +28,25 @@ export const reducers = {
       loading: true,
     }),
   [SUCCESS_ROLES_BY_REST]: (state, { payload }) => {
-    const rolesById = payload.roles.reduce(
-      (map,rest) => {
-        let mapById = Object.assign({}, map);
-        rest.restGuid = payload.restGuid;
-        mapById[rest.id] = rest;
-        
-        return mapById
-      }, {}
-    )
-    return state.mergeDeep({
-      rolesById,
-      loading: false,
-    });
+    if (!!payload.loaded) {
+      return state.merge({
+        loading: false,
+      });
+    } else {
+      const rolesById = payload.roles.reduce(
+        (map,rest) => {
+          let mapById = Object.assign({}, map);
+          rest.restGuid = payload.restGuid;
+          mapById[rest.id] = rest;
+          
+          return mapById
+        }, {}
+      )
+      return state.mergeDeep({
+        rolesById,
+        loading: false,
+      });
+    }
   },
 }
 

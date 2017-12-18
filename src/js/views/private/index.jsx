@@ -133,6 +133,9 @@ class PrivateView extends Component {
         //     console.log(temp);
         //   })
       })
+      .then(
+        () => this.props.successRolesByRest({loaded: true})
+      )
       .catch((err) => {
         console.warn('Network Error', err);
       });
@@ -255,6 +258,7 @@ class PrivateView extends Component {
       .then((res)=>{
         this.props.updateEmpl(res.data.data);
       })
+      .then( () => this.props.selectEmpl({ guid: '' }) )
       // .then(() =>
       //   axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
       // // TODO: with roleGUID
@@ -287,7 +291,7 @@ class PrivateView extends Component {
     console.log(this.props.restaurants)
     if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
-        .find(rest => { if (!!rest) {rest.get('guid') === this.props.selectedRestId} })
+        .find(rest => { console.log(rest); if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
         .get('id')
         .toString();
     } else { selectedRestSimpleId = '' };
@@ -299,7 +303,8 @@ class PrivateView extends Component {
     console.log(selectedRestSimpleId, selectedRoleIdNum);
     filteredEmpl = this.props.employees
       .filter((empl) => {
-      // console.log(empl.get('roles'));
+        console.log(empl);
+
         let roles = empl.get('roles');
         if (selectedRestSimpleId !== '') {
           if (selectedRoleGuid !== '') {

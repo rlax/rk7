@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 const GET_EMPL = 'app/emplo/GET_EMPL';
 const SUCCESS_EMPL = 'app/emplo/SUCCESS_EMPL';
@@ -53,7 +53,8 @@ export const reducers = {
   }),
   [UPDATE_EMPL]: (state, { payload }) => {
     const newEmpl = {[payload.id]: payload};
-    return state.setIn(['emplById', `${payload.id}`], payload)
+    const newEmplMap = fromJS(payload);
+    return state.setIn(['emplById', `${payload.id}`], newEmplMap)
   },
 }
 
