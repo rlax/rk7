@@ -142,6 +142,28 @@ class PrivateView extends Component {
       .then(
         () => this.props.successRolesByRest({loaded: true})
       )
+      .then(
+        () => {
+          this.props.getEmpl();
+          const config = {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+            }
+          };
+          // const currentRoleGuidArr = this.props.roles.keySeq();
+          const currentRoleGuid = 'abc';
+          console.log(currentRoleGuidArr);
+          // const getEmploForRest
+          axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
+          // TODO: with roleGUID
+            .then((res) => {
+              const employees = res.data.data;
+              // console.log(employees);
+              // this.setState({ employees });
+              this.props.successEmpl({ employees });
+            })  
+        }
+      )
       .catch((err) => {
         console.warn('Network Error', err);
       });
@@ -200,22 +222,6 @@ class PrivateView extends Component {
             // this.setState({ employees });
             this.props.successEmpl({ employees });
           })  
-          //.then(() => {
-            /* let data = {
-              "cardCode" : "100500",
-              "roles" : {
-                  "1010175" : 0,
-                  "1" : 0
-              },
-              "guid" : "bb895ed6-faa9-4105-a844-4eb3b9250dd3",
-              "id" : 1029624,
-              "name" : "Меркушева Полина Андреевна",
-              "code" : 1029624
-            }; */
-            /*  axios.put(`${__CONFIG__.apiURL}/employees/1029624`, data, config)
-            // TODO: with roleGUID
-              .then(() => {}) */
-          //})
       }
     }
   }
