@@ -4,11 +4,11 @@ form {
   display: flex;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
-  justify-content: center;
+  justify-content: space-between;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin-top: 15px;
-  padding: 1.5%;
+  padding: 1px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -16,6 +16,6 @@ form {
 .employeeCard {
   &__field-wrap {
     display: inline-block;
-    width: 256px
+    max-width: 260px;
   }
 }
