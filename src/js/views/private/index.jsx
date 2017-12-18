@@ -7,6 +7,7 @@ import { restaListSelector, restaByIdSelector } from '../../redux/selectors/rest
 import { employeeTotalSelector, emploMapByIdDataSelector, employeeSelectedSelector } from '../../redux/selectors/emploSelector';
 import { rolesData } from '../../redux/selectors/rolesSelector';
 import { ErrorBoundary } from '../../common/components/Utilities';
+import { Loading } from '../../common/components/Utilities';
 
 import axios from 'axios';
 
@@ -78,7 +79,12 @@ const mapStateToProps = (state) => {
     employees: emploMapByIdDataSelector(state),
     employeeTotal: employeeTotalSelector(state),
     roles: rolesData(state),
-    ui: {selectedGuidForEdit: employeeSelectedSelector(state)},
+    ui: {
+      selectedGuidForEdit: employeeSelectedSelector(state),
+      loadingRestaurants: state.resta.get('loading'),
+      loadingRoles: state.roles.get('loading'),
+      loadingEmplo: state.emplo.get('loading'),
+    },
   }
 };
 
@@ -287,6 +293,7 @@ class PrivateView extends Component {
   } 
 
   render() {
+    const { loadingRestaurants, loadingRoles, loadingEmplo } = this.props.ui;
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
     console.log(this.props.restaurants)
     if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
@@ -319,20 +326,26 @@ class PrivateView extends Component {
       <div className="rk-private">
       <ErrorBoundary>
         <div className="rk-restaurants-list">
-          <ul>
-            {
-              !!this.props.restaurants && this.props.restaurants.valueSeq().map(rest => (
-                <RestaurantInfo 
-                  isSelected={this.props.selectedRestId === rest.get('guid')}
-                  restMap={rest}
-                  rolesMap={this.props.roles.valueSeq().filter(
-                    role => { return rest.get('guid') == role.get('restGuid')} // TODO: strict equal?
-                  )}
-                  key={`rest_${rest.get('guid')}`}
-                >--</RestaurantInfo>)
-              )
-            }
-          </ul>
+          {
+            (loadingRestaurants || loadingRoles) && <Loading />
+          }
+          {
+            (!loadingRestaurants && !loadingRoles) &&
+            <ul>
+              {
+                !!this.props.restaurants && this.props.restaurants.valueSeq().map(rest => (
+                  <RestaurantInfo
+                    isSelected={this.props.selectedRestId === rest.get('guid')}
+                    restMap={rest}
+                    rolesMap={this.props.roles.valueSeq().filter(
+                      role => { return rest.get('guid') == role.get('restGuid')} // TODO: strict equal?
+                    )}
+                    key={`rest_${rest.get('guid')}`}
+                  >--</RestaurantInfo>)
+                )
+              }
+            </ul>
+          }
         </div>
         <div className="rk-editarea">
           <Switch>
@@ -349,7 +362,7 @@ class PrivateView extends Component {
               )}/>
           </Switch>
           {
-            this.props.selectedRestId !== undefined &&
+            this.props.selectedRestId !== undefined && !loadingEmplo &&
             // this.props.selectedRoleId !== undefined &&
           <div className="cards-container">
             <div className="cards">
@@ -358,6 +371,7 @@ class PrivateView extends Component {
                 // .filter((emp) =>
                 //   {emp.hasthis.props.selectedRestId}
                 // )
+                  .sort((a,b) => a.get('name') > b.get('name'))
                   .map((emp, index) => {
                     const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
                     return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
@@ -386,6 +400,7 @@ class PrivateView extends Component {
             </div>
           </div>
           }
+          { loadingEmplo && <Loading /> }
           {/* <CardExampleExpandable /> */}
           {/* <ul>
             <li>lorem</li>

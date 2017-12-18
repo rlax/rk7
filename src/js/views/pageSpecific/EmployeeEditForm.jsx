@@ -1,14 +1,14 @@
 import React from 'react'
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { TextField, SelectField } from 'redux-form-material-ui';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import { connect } from 'react-redux';
 import { required, integer } from '../../utility/validation';
 require('../../../style/emplForm.css');
 
-let fieldStyle = { width: '160px'};
+let fieldStyle = { width: '260px'};
 let disabledFieldStyle = { width: '160px', height: '72px'};
 
 let EmployeeEditForm = (props) => {
@@ -93,7 +93,7 @@ let EmployeeEditForm = (props) => {
         </div>
       </div>
       <div className="employeeCard__field-wrap">
-        <label>Код карты</label>
+        <label>Идентификатор</label>
         <div>
           <Field
             name="guid"
@@ -106,7 +106,7 @@ let EmployeeEditForm = (props) => {
       </div>
       <div className="employeeCard__field-wrap">
         <div>
-          <FlatButton type="submit" disabled={pristine || submitting} label="Изменить" />
+          <RaisedButton type="submit" disabled={pristine || submitting} label="Изменить" primary />
           {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
             Сбросить поля
           </button> */}

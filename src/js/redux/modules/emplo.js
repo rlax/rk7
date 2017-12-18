@@ -1,5 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
+<<<<<<< HEAD
 import { Map, fromJS } from 'immutable';
+=======
+import { Map } from 'immutable';
+>>>>>>> 29b49a7fc9c6174a7133a135bafc78fd3fdefff4
 
 const GET_EMPL = 'app/emplo/GET_EMPL';
 const SUCCESS_EMPL = 'app/emplo/SUCCESS_EMPL';
