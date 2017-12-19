@@ -146,24 +146,24 @@ class PrivateView extends Component {
       )
       .then(
         () => {
-          this.props.getEmpl();
-          const config = {
-            headers: {
-              'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
-            }
-          };
+          // this.props.getEmpl();
+          // const config = {
+          //   headers: {
+          //     'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
+          //   }
+          // };
           // const currentRoleGuidArr = this.props.roles.keySeq();
-          const currentRoleGuid = 'abc';
-          console.log(currentRoleGuidArr);
-          // const getEmploForRest
-          axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
-          // TODO: with roleGUID
-            .then((res) => {
-              const employees = res.data.data;
-              // console.log(employees);
-              // this.setState({ employees });
-              this.props.successEmpl({ employees });
-            })  
+          // // const currentRoleGuid = 'abc';
+          // console.log(currentRoleGuidArr);
+          // // const getEmploForRest
+          // axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
+          // // TODO: with roleGUID
+          //   .then((res) => {
+          //     const employees = res.data.data;
+          //     // console.log(employees);
+          //     // this.setState({ employees });
+          //     this.props.successEmpl({ employees });
+          //   })  
         }
       )
       .catch((err) => {

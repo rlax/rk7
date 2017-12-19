@@ -47,7 +47,7 @@ let EmployeeEditForm = (props) => {
             <div><span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span></div>
             <Divider inset />
             {empData.otherRoles
-            .sort((a,b) => a.get('restaurantGuid') < b.get('restaurantGuid'))
+            .sort((a,b) => a.get('restaurantName') < b.get('restaurantName'))
             .map((role) => (
                 <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')}`}>
                   <span className="rk-select-hint">{role.get('restaurantName')}</span>
