@@ -42,7 +42,9 @@ const RestaurantInfo = props => (<li>
   </NavLink>
   { props.isSelected &&
     <div className="restaurantRoles">{
-      props.rolesMap.valueSeq().map((role) => {
+      props.rolesMap.valueSeq()
+      .sort((a,b) => a.get('name') > b.get('name'))
+      .map((role) => {
         return (
           <div className="restaurantRoles-row" key={`${role}`}>
             <NavLink 
@@ -339,7 +341,9 @@ class PrivateView extends Component {
             (!loadingRestaurants && !loadingRoles) &&
             <ul>
               {
-                !!this.props.restaurants && this.props.restaurants.valueSeq().map(rest => (
+                !!this.props.restaurants && this.props.restaurants.valueSeq()
+                .sort((a,b) => a.get('name') > b.get('name'))
+                .map(rest => (
                   <RestaurantInfo
                     isSelected={this.props.selectedRestId === rest.get('guid')}
                     restMap={rest}
@@ -377,7 +381,7 @@ class PrivateView extends Component {
                 // .filter((emp) =>
                 //   {emp.hasthis.props.selectedRestId}
                 // )
-                  .sort((a,b) => a.get('name') > b.get('name'))
+                  .sort((a,b) => a.get('name') < b.get('name'))
                   .map((emp, index) => {
                     const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
                     return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 

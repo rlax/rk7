@@ -45,17 +45,17 @@ class CardExampleExpandable extends Component {
         <Card expanded={isExpandedForEdit}>
           <CardHeader
             title={empMap.get('name')}
-            subtitle={empMap.get('code')}
+            subtitle={`Код карты: ${empMap.get('cardCode')}`}
             actAsExpander={false}
             showExpandableButton={false}
           >
             <div className="employeeCard-subheader">
-              <div className="employeeCard-row">Cardcode - {empMap.get('cardCode')}</div>
+              {/* <div className="employeeCard-row">Cardcode - {empMap.get('cardCode')}</div>
               <div className="employeeCard-row">name - {empMap.get('name')}</div>
               <div className="employeeCard-row">guid - {empMap.get('guid')}</div>
               <div className="employeeCard-row">code - {empMap.get('code')}</div>
-              <div className="employeeCard-row">id - {empMap.get('id')}</div>          
-            </div>  
+              <div className="employeeCard-row">id - {empMap.get('id')}</div>           */}
+            </div>
             <Toggle
               toggled={isExpandedForEdit}
               onToggle={()=>this.props.selectEmployeeFn(empMap.get('guid'))}

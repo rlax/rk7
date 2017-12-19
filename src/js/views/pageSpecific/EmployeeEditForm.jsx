@@ -33,22 +33,23 @@ let EmployeeEditForm = (props) => {
         <div>
           <Field
             name="role"
+            autoWidth
             // style={fieldStyle}
             component={SelectField}
             hintText="Роль"
             floatingLabelText="Роль"
           >
             {empData.availableRoles.map((role) => (
-              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`} />)
+              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')}`} />)
             )}
             <MenuItem value="0" primaryText="Сбросить роль" />
             <Divider inset />
-            <span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span>
+            <div><span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span></div>
             <Divider inset />
             {empData.otherRoles
-            .sortBy(role => role.get('restaurantGuid'))
+            .sort((a,b) => a.get('restaurantGuid') < b.get('restaurantGuid'))
             .map((role) => (
-                <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')} / ${role.get('id')}`}>
+                <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')}`}>
                   <span className="rk-select-hint">{role.get('restaurantName')}</span>
                 </MenuItem>
             )
