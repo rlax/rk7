@@ -112,7 +112,6 @@ class PrivateView extends Component {
     axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
       .then((res) => { 
         const restaurantsList = res.data.data;
-        console.log(restaurantsList);
         // this.setState({ restaurantsList });
         this.props.successResta({ restaurantsList });
         return restaurantsList
@@ -123,7 +122,7 @@ class PrivateView extends Component {
           const getRolesForRest = (resta) => {
             axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${resta.guid}`, config)
             .then((res) => {
-              const roles = res.data.data;
+              const roles = res.data;
               this.props.successRolesByRest({ roles, restGuid: resta.guid });
             })
             .catch((err) => {
@@ -132,11 +131,9 @@ class PrivateView extends Component {
           }
           axiosFnArray.push(getRolesForRest(rest));
         });
-        // console.log(axiosFnArray);
         // return axios.all(axiosFnArray)
         //   .then((res) => {
         //     let temp = res.map(r => r);
-        //     console.log(temp);
         //   })
       })
       .then(
@@ -150,16 +147,14 @@ class PrivateView extends Component {
               'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
             }
           };
-          // const currentRoleGuidArr = this.props.roles.keySeq();
+          const currentRoleGuidArr = this.props.roles.keySeq();
           const currentRoleGuid = 'abc';
           console.log(currentRoleGuidArr);
           // const getEmploForRest
           axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
           // TODO: with roleGUID
             .then((res) => {
-              const employees = res.data.data;
-              // console.log(employees);
-              // this.setState({ employees });
+              const employees = res.data;
               this.props.successEmpl({ employees });
             })  
         }
@@ -173,7 +168,7 @@ class PrivateView extends Component {
       axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${this.props.selectedRestId}`, config)
     // TODO: with roleGUID
       .then((res) => {
-        const roles = res.data.data;
+        const roles = res.data;
         this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
@@ -198,7 +193,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/roles?restaurantGuid=${nextProps.selectedRestId}`, config)
       // TODO: with roleGUID
         .then((res) => {
-          const roles = res.data.data;
+          const roles = res.data;
           console.info('private >> cWRP: new selectedRestId');
           this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
         })
@@ -217,9 +212,7 @@ class PrivateView extends Component {
         axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
         // TODO: with roleGUID
           .then((res) => {
-            const employees = res.data.data;
-            // console.log(employees);
-            // this.setState({ employees });
+            const employees = res.data;
             this.props.successEmpl({ employees });
           })  
       }
@@ -276,7 +269,6 @@ class PrivateView extends Component {
       // // TODO: with roleGUID
       //     .then((res) => {
       //       const employees = res.data.data;
-      //       // console.log(employees);
       //       // this.setState({ employees });
       //       this.props.successEmpl({ employees });
       //     })  
@@ -291,7 +283,6 @@ class PrivateView extends Component {
 
   selectEmployee = (guid) => {
     if (this.props.ui.selectedGuidForEdit === guid) {
-      console.log('same');
       this.props.selectEmpl({ guid: '' });
     } else {
       this.props.selectEmpl({ guid });
@@ -301,10 +292,9 @@ class PrivateView extends Component {
   render() {
     const { loadingRestaurants, loadingRoles, loadingEmplo } = this.props.ui;
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
-    console.log(this.props.restaurants)
     if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
-        .find(rest => { console.log(rest); if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
+        .find(rest => { if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
         .get('id')
         .toString();
     } else { selectedRestSimpleId = '' };
@@ -316,8 +306,6 @@ class PrivateView extends Component {
     console.log(selectedRestSimpleId, selectedRoleIdNum);
     filteredEmpl = this.props.employees
       .filter((empl) => {
-        console.log(empl);
-
         let roles = empl.get('roles');
         if (selectedRestSimpleId !== '') {
           if (selectedRoleGuid !== '') {
@@ -330,12 +318,12 @@ class PrivateView extends Component {
     console.log(filteredEmpl);
     return (
       <div className="rk-private">
-      <ErrorBoundary>
-        <div className="rk-restaurants-list">
-          {
-            (loadingRestaurants || loadingRoles) && <Loading />
-          }
-          {
+        <ErrorBoundary>
+          <div className="rk-restaurants-list">
+            {
+              (loadingRestaurants || loadingRoles) && <Loading />
+            }
+            {
             (!loadingRestaurants && !loadingRoles) &&
             <ul>
               {

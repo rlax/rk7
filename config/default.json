@@ -27,6 +27,6 @@
   ],
   "app": {
     "description": "config inside 'app' will be injected to your frontend code automatically",
-    "apiURL": "http://localhost:58546/api"
+    "apiURL": "http://localhost:3000"
   }
 }
