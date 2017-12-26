@@ -101,7 +101,6 @@ class PrivateView extends Component {
   }
 
   componentDidMount() {
-    console.log(__CONFIG__);
     const config = {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('rk7token'),
@@ -114,7 +113,6 @@ class PrivateView extends Component {
     axios.get(`${__CONFIG__.apiURL}/restaurants/`, config)
       .then((res) => { 
         const restaurantsList = res.data.data;
-        console.log(restaurantsList);
         // this.setState({ restaurantsList });
         this.props.successResta({ restaurantsList });
         return restaurantsList
@@ -129,16 +127,15 @@ class PrivateView extends Component {
               this.props.successRolesByRest({ roles, restGuid: resta.guid });
             })
             .catch((err) => {
-              console.warn('Network Error', err);
+              localStorage.removeItem('rk7token');
+              this.props.errorLogin({ user: 'Logged User', error: err.response });
             });
           }
           axiosFnArray.push(getRolesForRest(rest));
         });
-        // console.log(axiosFnArray);
         // return axios.all(axiosFnArray)
         //   .then((res) => {
         //     let temp = res.map(r => r);
-        //     console.log(temp);
         //   })
       })
       .then(
@@ -154,20 +151,19 @@ class PrivateView extends Component {
           // };
           // const currentRoleGuidArr = this.props.roles.keySeq();
           // // const currentRoleGuid = 'abc';
-          // console.log(currentRoleGuidArr);
           // // const getEmploForRest
           // axios.get(`${__CONFIG__.apiURL}/employees?roleGuid=${currentRoleGuid}`, config)
           // // TODO: with roleGUID
           //   .then((res) => {
           //     const employees = res.data.data;
-          //     // console.log(employees);
           //     // this.setState({ employees });
           //     this.props.successEmpl({ employees });
           //   })  
         }
       )
       .catch((err) => {
-        console.warn('Network Error', err);
+        localStorage.removeItem('rk7token');
+        this.props.errorLogin({ user: 'Logged User', error: err.response });
       });
 
     if (this.props.selectedRestId) {
@@ -179,7 +175,8 @@ class PrivateView extends Component {
         this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
       })
       .catch((err) => {
-        console.warn('Network Error', err);
+        localStorage.removeItem('rk7token');
+        this.props.errorLogin({ user: 'Logged User', error: err.response });
       });
     }
   }
@@ -205,7 +202,8 @@ class PrivateView extends Component {
           this.props.successRolesByRest({ roles, restGuid: this.props.selectedRestId });
         })
         .catch((err) => {
-          console.warn('Network Error', err);
+          localStorage.removeItem('rk7token');
+          this.props.errorLogin({ user: 'Logged User', error: err.response });
         });
       }
       if (nextProps.selectedRoleId !== undefined && nextProps.selectedRoleId !== this.props.selectedRoleId) {
@@ -220,10 +218,13 @@ class PrivateView extends Component {
         // TODO: with roleGUID
           .then((res) => {
             const employees = res.data.data;
-            // console.log(employees);
             // this.setState({ employees });
             this.props.successEmpl({ employees });
-          })  
+          }) 
+          .catch((err) => {
+            localStorage.removeItem('rk7token');
+            this.props.errorLogin({ user: 'Logged User', error: err.response });
+          }) 
       }
     }
   }
@@ -247,7 +248,6 @@ class PrivateView extends Component {
       restWithSelectedRoleGuid = this.props.selectedRestId;
     }
     const restWithSelectedRoleId = this.props.restaurants.valueSeq().find(rest => restWithSelectedRoleGuid === rest.get('guid')).get('id');
-    console.log(empMap, values, restWithSelectedRoleGuid, this.props.selectedRestId);
     let putValues = {};
     if ( restWithSelectedRoleGuid !== this.props.selectedRestId ) {
       let prevRoles = empMap.get('roles');
@@ -278,7 +278,6 @@ class PrivateView extends Component {
       // // TODO: with roleGUID
       //     .then((res) => {
       //       const employees = res.data.data;
-      //       // console.log(employees);
       //       // this.setState({ employees });
       //       this.props.successEmpl({ employees });
       //     })  
@@ -288,12 +287,13 @@ class PrivateView extends Component {
       // )  
       .catch((err) => {
         console.warn('PUT employee network error:', err);
+        localStorage.removeItem('rk7token');
+        this.props.errorLogin({ user: 'Logged User', error: err.response });
       });
   }
 
   selectEmployee = (guid) => {
     if (this.props.ui.selectedGuidForEdit === guid) {
-      console.log('same');
       this.props.selectEmpl({ guid: '' });
     } else {
       this.props.selectEmpl({ guid });
@@ -303,10 +303,9 @@ class PrivateView extends Component {
   render() {
     const { loadingRestaurants, loadingRoles, loadingEmplo } = this.props.ui;
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
-    console.log(this.props.restaurants)
     if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
-        .find(rest => { console.log(rest); if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
+        .find(rest => { if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
         .get('id')
         .toString();
     } else { selectedRestSimpleId = '' };
@@ -315,10 +314,8 @@ class PrivateView extends Component {
       selectedRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid'])
       // .toString();
     } else  { selectedRoleGuid = '' };
-    console.log(selectedRestSimpleId, selectedRoleIdNum);
     filteredEmpl = this.props.employees
       .filter((empl) => {
-        console.log(empl);
 
         let roles = empl.get('roles');
         if (selectedRestSimpleId !== '') {
@@ -329,7 +326,6 @@ class PrivateView extends Component {
           } 
         }
       });
-    console.log(filteredEmpl);
     return (
       <div className="rk-private">
       <ErrorBoundary>
@@ -368,7 +364,17 @@ class PrivateView extends Component {
             <Route 
               path="/:restaurantId"
               render={() => (
-                <h1>Все сотрудники</h1>
+                <div>
+                  <h1>Все сотрудники</h1>
+                  <EmployeesRole 
+                    restId={this.props.selectedRestId}
+                    // rolesMap={ // add prop rolesMap if restaurant is opened in sidebar
+                    //   this.props.roles.valueSeq().filter(
+                    //     role => { return rest.get('guid') == role.get('restGuid')}
+                    //   )
+                    // }
+                  />
+                </div>
               )}/>
           </Switch>
           {
