@@ -41,7 +41,7 @@ class CardExampleExpandable extends Component {
     const { empMap, values } = this.props;
     const { isExpandedForEdit } = this.props;
     return (
-      <div className={`employeeCard${isExpandedForEdit && ' employeeCard--active'}`}>
+      <div className={`employeeCard${isExpandedForEdit ? ' employeeCard--active' : ''}`}>
         <Card expanded={isExpandedForEdit}>
           <CardHeader
             title={empMap.get('name')}
