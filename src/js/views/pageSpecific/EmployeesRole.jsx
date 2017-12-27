@@ -44,17 +44,19 @@ class EmployeesRole extends Component {
   }
 
   render() {
-    const { restId, roleId } = this.props;
+    const { restId, restName, roleName, roleId } = this.props;
     return (
-      <div className="employeeCard">
+      <div className="empListInfoCard">
         {/* {
           this.state.rolesList.length !== 0 && this.state.rolesList.map(role => (
             <div className="roles-header"><h2 className="role-title">{role.name}</h2><span>{role.id} || {role.guid}</span></div>
           ))
         } */}
-        <div className="employeeCard-title">Rest - {restId}</div>
+        <div className="employeeCard-title">
+          {!!restName ? restName : `--- (${restId})`}
+        </div>
         <div className="roles-header">
-          <h2 className="role-title">{roleId}</h2>
+          <h2 className="role-title">{!!roleName ? roleName : `Роль ${roleId}`}</h2>
         </div>
       </div>
     );
