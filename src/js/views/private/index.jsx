@@ -343,6 +343,35 @@ class PrivateView extends Component {
         }
         return true
       });
+    let sortedEmpl = filteredEmpl.valueSeq()
+        .sort((a,b) => {
+          return a.get('name').localeCompare(b.get('name')); // fixed sort for cyrillic names
+        })
+    let mappedEmpl = sortedEmpl
+      .map((emp, index) => {
+          const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
+          return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
+            empMap={emp}
+            isExpandedForEdit={this.props.ui.selectedGuidForEdit === emp.get('guid')}
+            values={{
+              guid: emp.get('guid'),
+              name: emp.get('name'),
+              id: emp.get('id'),
+              code: emp.get('code'),
+              cardCode: emp.get('cardCode'),
+              role: emp.getIn(['roles', String(curRestForRole)]),
+              availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid')),
+              otherRoles: this.props.roles.valueSeq()
+                .filter(role => this.props.selectedRestId !== role.get('restGuid'))
+                .map((role) => {
+                  return role.set(
+                    'restaurantName', // key
+                    this.props.restaurants.valueSeq().find(rest => role.get('restGuid') === rest.get('guid')).get('name') // value
+                  );
+                }),
+          }}
+        />)
+      });
     return (
       <div className="rk-private">
       <ErrorBoundary>
@@ -414,35 +443,7 @@ class PrivateView extends Component {
           <div className="cards-container">
             <div className="cards">
               {
-                filteredEmpl.valueSeq()
-                // .filter((emp) =>
-                //   {emp.hasthis.props.selectedRestId}
-                // )
-                  .sort((a,b) => a.get('name') > b.get('name'))
-                  .map((emp, index) => {
-                    const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
-                    return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 
-                      empMap={emp}
-                      isExpandedForEdit={this.props.ui.selectedGuidForEdit === emp.get('guid')}
-                      values={{
-                        guid: emp.get('guid'),
-                        name: emp.get('name'),
-                        id: emp.get('id'),
-                        code: emp.get('code'),
-                        cardCode: emp.get('cardCode'),
-                        role: emp.getIn(['roles', String(curRestForRole)]),
-                        availableRoles: this.props.roles.valueSeq().filter(role => this.props.selectedRestId === role.get('restGuid')),
-                        otherRoles: this.props.roles.valueSeq()
-                          .filter(role => this.props.selectedRestId !== role.get('restGuid'))
-                          .map((role) => {
-                            return role.set(
-                              'restaurantName', // key
-                              this.props.restaurants.valueSeq().find(rest => role.get('restGuid') === rest.get('guid')).get('name') // value
-                            );
-                          }),
-                    }}
-                  />)
-                })
+                mappedEmpl
               }
             </div>
           </div>

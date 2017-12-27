@@ -18,7 +18,7 @@ class Header extends PureComponent {
           <li className={!isHome ? 'active' : ''}>
             {
               isHome ?
-                'Home' : <Link to="/">Home</Link>
+                'Управление ролями' : <span>Управление ролями</span>
 
             }
           </li>

@@ -92,6 +92,7 @@ li a:hover {
   border-radius: 9px;
   background: #eff1e5;
 	color: #363636;
+	width: 50%;
 	text-decoration: none;
 	@include box-shadow(rgba(black, 0.19) 0 0 8px 0);
 	@include border-radius(4px);
