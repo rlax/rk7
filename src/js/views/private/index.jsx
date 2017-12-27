@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Link, NavLink } from 'react-router-dom';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 import { restaListSelector, restaByIdSelector } from '../../redux/selectors/restaSelector';
 import { employeeTotalSelector, emploMapByIdDataSelector, employeeSelectedSelector } from '../../redux/selectors/emploSelector';
 import { rolesData } from '../../redux/selectors/rolesSelector';
@@ -97,7 +98,7 @@ class PrivateView extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {restaurantsList: [], employees: [], rolesList: []};
+    this.state = {restaurantsList: [], employees: [], rolesList: [], searchValue: ''};
   }
 
   componentDidMount() {
@@ -292,6 +293,12 @@ class PrivateView extends Component {
       });
   }
 
+  handleChange = (event) => {
+    this.setState({
+      searchValue: event.target.value,
+    });
+  };
+
   selectEmployee = (guid) => {
     if (this.props.ui.selectedGuidForEdit === guid) {
       this.props.selectEmpl({ guid: '' });
@@ -302,16 +309,20 @@ class PrivateView extends Component {
 
   render() {
     const { loadingRestaurants, loadingRoles, loadingEmplo } = this.props.ui;
+    let { searchValue } = this.state;
     let filteredEmpl = ''; let selectedRestSimpleId = ''; let selectedRoleGuid = ''; let selectedRoleIdNum = '';
+    let selectedRestName = ''; let selectedRoleName = '';
     if (!!this.props.selectedRestId && this.props.restaurants.size > 0) {
       selectedRestSimpleId = this.props.restaurants.valueSeq()
         .find(rest => { if (!!rest) { return rest.get('guid') === this.props.selectedRestId} })
         .get('id')
         .toString();
+      selectedRestName = this.props.restaurants.getIn([selectedRestSimpleId, 'name']); // use simpleId, bc mapped by it
     } else { selectedRestSimpleId = '' };
     if (!!this.props.selectedRoleId) {
       selectedRoleIdNum = parseInt(this.props.selectedRoleId);
-      selectedRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid'])
+      selectedRoleGuid = this.props.roles.getIn([this.props.selectedRoleId, 'guid']);
+      selectedRoleName = this.props.roles.getIn([this.props.selectedRoleId, 'name'])
       // .toString();
     } else  { selectedRoleGuid = '' };
     filteredEmpl = this.props.employees
@@ -325,6 +336,12 @@ class PrivateView extends Component {
             return (roles.has(selectedRestSimpleId));
           } 
         }
+      })
+      .filter((empl) => {
+        if (searchValue !== '') {
+          return empl.get('name').includes(searchValue) || empl.get('cardCode').includes(searchValue);
+        }
+        return true
       });
     return (
       <div className="rk-private">
@@ -358,7 +375,12 @@ class PrivateView extends Component {
             <Route 
               path="/:restaurantId/:roleId"
               render={props => (
-                <EmployeesRole restId={this.props.selectedRestId} roleId={this.props.selectedRoleId} />
+                <EmployeesRole 
+                  restId={this.props.selectedRestId}
+                  restName={selectedRestName}
+                  roleId={this.props.selectedRoleId} 
+                  roleName={selectedRoleName}
+                />
               )}/>
             {/* <Form employeeGuid="A1-KUN" /> */}
             <Route 
@@ -377,6 +399,15 @@ class PrivateView extends Component {
                 </div>
               )}/>
           </Switch>
+          <TextField 
+            name="search-controlled"
+            value={this.state.searchValue}
+            onChange={this.handleChange}
+            hintText="Иванов... ИЛИ 105106..."
+            floatingLabelText="Поиск по работникам на текущей странице"
+            floatingLabelFixed={true}
+            fullWidth={true}
+          />
           {
             this.props.selectedRestId !== undefined && !loadingEmplo &&
             // this.props.selectedRoleId !== undefined &&
@@ -387,7 +418,7 @@ class PrivateView extends Component {
                 // .filter((emp) =>
                 //   {emp.hasthis.props.selectedRestId}
                 // )
-                  .sort((a,b) => a.get('name') < b.get('name'))
+                  .sort((a,b) => a.get('name') > b.get('name'))
                   .map((emp, index) => {
                     const curRestForRole = this.props.restaurants.valueSeq().find(rest => this.props.selectedRestId === rest.get('guid')).get('id');
                     return (<CardExampleExpandable key={`cee${index}`} saveEmployeeFn={this.saveEmployee} selectEmployeeFn={this.selectEmployee} 

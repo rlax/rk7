@@ -19,6 +19,7 @@
 .rk-editarea {
   margin-left: 250px;
   display: block;
+  padding: 12px;
 }
 
 .rk-restaurants-list {
@@ -85,7 +86,8 @@ li a:hover {
 	@media (max-width: 700px) {
 		width: 100%;
 	}
-	position: relative;
+  position: relative;
+  width: 50%;
   padding-bottom: 9px;
   border-radius: 9px;
   background: #eff1e5;
@@ -178,4 +180,8 @@ li a:hover {
 			max-height: 1em;
 		}
 	}
+}
+
+.employeeCard--active {
+  width: 100%;
 }
