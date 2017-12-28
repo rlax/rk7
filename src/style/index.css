@@ -17,20 +17,24 @@ body {
 }
 
 .container__content {
-  color: $color-title;
+  color: $clrK1;
 }
 
 h1, h2 {
-  color: $color-title;
+  color: $clrK1;
   font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
 .rk-remove {
   font-size: 10px;
-  color: rgba(168, 214, 252, 0.863);
+  color: $clr-skyl;
 }
 
 .rk-select-hint {
   font-size: 11px;
-  border-bottom: 1px dashed gray;
+  border-bottom: 1px dashed color($clrK1 tint(30%));
+}
+.rk-select-info {
+  font-size: 12px;
+  color: color($clr-blue tint(50%));
 }

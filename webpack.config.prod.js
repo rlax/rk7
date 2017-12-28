@@ -6,6 +6,7 @@ import SaveAssetsJson from 'assets-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import precss from 'precss';
 import postcssCssnext from 'postcss-cssnext';
+// import postCssColorFunction from 'postcss-color-function';
 
 import webpackConfig, { JS_SOURCE } from './webpack.config.common';
 
@@ -78,6 +79,7 @@ webpackConfig.module.rules = webpackConfig.module.rules.concat({
           sourceMap: true,
           plugins: () => [
             precss(),
+            // postCssColorFunction(),
             postcssCssnext({
               browsers: ['last 2 versions', 'ie >= 9'],
               compress: true,

@@ -1,4 +1,5 @@
 @import "configs/size";
+@import "configs/color";
 
 .rk-private {}
 
@@ -23,44 +24,44 @@
 }
 
 .rk-restaurants-list {
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
-.restaurantRoles-row {
-  font-style: bold;
-  border-top: 1px solid #ccc;
-}
+  .restaurantRoles-row {
+    font-style: bold;
+    border-top: 1px solid #ccc;
+  }
 
-li {
-  font: 200 $fz/1.5 Helvetica, Verdana, sans-serif;
-  border-bottom: 1px solid #ccc;
-}
+  li {
+    font: 200 $fz/1.5 Helvetica, Verdana, sans-serif;
+    border-bottom: 1px solid #ccc;
+  }
 
-li:last-child {
-  border: none;
-}
+  li:last-child {
+    border: none;
+  }
 
-li a {
-  text-decoration: none;
-  color: #000;
+  li a {
+    text-decoration: none;
+    color: #000;
 
-  -webkit-transition: background-color 0.3s ease;
-  -moz-transition: background-color 0.3s ease;
-  -o-transition: background-color 0.3s ease;
-  -ms-transition: background-color 0.3s ease;
-  transition: background-color 0.3s ease;
-  display: block;
-  /* width: 200px; */
-  padding: $blockPad;
-}
+    -webkit-transition: background-color 0.3s ease;
+    -moz-transition: background-color 0.3s ease;
+    -o-transition: background-color 0.3s ease;
+    -ms-transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease;
+    display: block;
+    /* width: 200px; */
+    padding: $blockPad;
+  }
 
-li a:hover {
-  font-size: $fz;
-  background: #f6f6f6;
-}
+  li a:hover {
+    font-size: $fz;
+    background: $clr-blue-light;
+  }
 }
 
 .cards-container {
