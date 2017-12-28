@@ -44,7 +44,11 @@ let EmployeeEditForm = (props) => {
             floatingLabelText="Роль"
           >
             {empData.availableRoles.map((role) => (
-              <MenuItem key={`${role.get('id')}`} value={role.get('id')}>
+              <MenuItem 
+                key={`${role.get('id')}`}
+                label={`${role.get('name')}`}
+                value={role.get('id')}
+                >
                 <span>{`${role.get('name')} `}</span>
                 <span className="rk-remove">{role.get('id')}</span>
               </MenuItem>)
@@ -62,6 +66,7 @@ let EmployeeEditForm = (props) => {
             .map((role) => (
                 <MenuItem 
                   key={`${role.get('id')}`}
+                  label={`${role.get('name')} (${role.get('restaurantName')})`}
                   value={role.get('id')}
                   rightIcon={<PersonAdd />}
                   >
