@@ -4,13 +4,15 @@ import { TextField, SelectField } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
+import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import { connect } from 'react-redux';
 import { required, integer } from '../../utility/validation';
 require('../../../style/emplForm.css');
 
-let fieldStyle = { width: '260px'};
-let disabledFieldStyle = { width: '0px', height: '72px'};
-let shownDisabledFieldStyle = { width: '100px', height: '72px'};
+const fieldStyle = { width: '260px'};
+const disabledFieldStyle = { width: '160px', height: '72px'};
+const selectedMenuItemStyle = {color: '#a51d1d', backgroundColor: '#f9d6d0'} ;
+const dividerColor = {};
 
 let EmployeeEditForm = (props) => {
   const { handleSubmit, pristine, reset, submitting, initialValues, form, empData } = props
@@ -36,22 +38,40 @@ let EmployeeEditForm = (props) => {
             name="role"
             autoWidth
             // style={fieldStyle}
+            selectedMenuItemStyle={selectedMenuItemStyle}
             component={SelectField}
             hintText="Роль"
             floatingLabelText="Роль"
           >
             {empData.availableRoles.map((role) => (
-              <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')}`} />)
+              <MenuItem 
+                key={`${role.get('id')}`}
+                label={`${role.get('name')}`}
+                value={role.get('id')}
+                >
+                <span>{`${role.get('name')} `}</span>
+                <span className="rk-remove">{role.get('id')}</span>
+              </MenuItem>)
             )}
             <MenuItem value="0" primaryText="Сбросить роль" />
-            <Divider inset />
-            <div><span className="rk-remove">Для переноса в другой ресторан можно выбрать его роль из списка ниже</span></div>
-            <Divider inset />
+            <Divider style={dividerColor} />
+            <div style={{textAlign:'center'}}>
+              <span className="rk-select-info">
+                Для переноса в другой ресторан можно выбрать его роль из списка ниже
+              </span>
+            </div>
+            <Divider style={dividerColor} />
             {empData.otherRoles
             .sort((a,b) => a.get('restaurantName') < b.get('restaurantName'))
             .map((role) => (
-                <MenuItem key={`${role.get('id')}`} value={role.get('id')} primaryText={`${role.get('name')}`}>
-                  <span className="rk-select-hint">{role.get('restaurantName')}</span>
+                <MenuItem 
+                  key={`${role.get('id')}`}
+                  label={`${role.get('name')} (${role.get('restaurantName')})`}
+                  value={role.get('id')}
+                  rightIcon={<PersonAdd />}
+                  >
+                  <div className="rk-select-hint">{role.get('restaurantName')}</div>
+                  <span>{`${role.get('name')} `}</span><span className="rk-remove">{role.get('id')}</span>
                 </MenuItem>
             )
             )}

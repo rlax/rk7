@@ -5,6 +5,7 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import DashboardPlugin from 'webpack-dashboard/plugin';
 import precss from 'precss';
 import postcssCssnext from 'postcss-cssnext';
+// import postCssColorFunction from 'postcss-color-function';
 
 import webpackConfig, { JS_SOURCE } from './webpack.config.common';
 
@@ -90,6 +91,7 @@ webpackConfig.module.rules = webpackConfig.module.rules.concat({
         // https://github.com/postcss/postcss-loader/issues/8
         plugins: () => [
           precss(),
+          // postCssColorFunction(),
           postcssCssnext({
             browsers: ['last 2 versions', 'ie >= 9'],
             compress: true,

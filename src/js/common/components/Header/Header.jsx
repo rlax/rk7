@@ -10,7 +10,7 @@ class Header extends PureComponent {
     const isHome = pathname === '/';
     const isJustAnotherPage = pathname === '/page';
     const isLoginPage = pathname === '/login';
-    const righty = {marginLeft: '80%'};
+    const righty = {float: 'right'};
 
     return (
       <header className="globalHeader">

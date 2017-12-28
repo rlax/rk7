@@ -1,1 +1,10 @@
 $color-title: #721c24;
+$clr-red: #E13B39;
+$clr-blue: #0E212C;
+$clr-white: #F0EFE8;
+$clr-blue-light: #8FB1B4;
+$clr-sky: rgba(168, 214, 252, 1);
+$clr-skyl: color( $clr-sky a(80%) );
+/* zveta */
+$clrK1: #22313F;
+$clrK2: #2C3E50;
