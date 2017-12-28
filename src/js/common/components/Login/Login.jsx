@@ -4,10 +4,10 @@ import {
   Route,
 } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import { Loading } from '../Utilities';
+import './Login.css';
 import { connect } from 'react-redux';
-
 import axios from 'axios';
-
 import { actions as authActions } from '../../../redux/modules/auth';
 
 export const PrivateRoute = ({ component: NamedComponent, ...rest }) => (
@@ -32,6 +32,7 @@ const mapStateToProps = (state) => {
     auth: state.auth.get('auth'),
     user: state.auth.get('user'),
     error: state.auth.get('error'),
+    loading: state.auth.get('loading'),
   }
 };
 
@@ -76,7 +77,7 @@ class Login extends React.Component {
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { auth, error } = this.props;
+    const { auth, error, loading } = this.props;
     const { redirectToReferrer } = this.state;
 
     if (auth) {
@@ -88,9 +89,14 @@ class Login extends React.Component {
     return (
       <div>
         <p>Для редактирования требуется войти, используя ваше имя и пароль</p>{/* from.pathname */}
-        <LoginForm onSubmit={this.login} />
+        { !loading && 
+          <LoginForm onSubmit={this.login} />
+        }
+        { loading &&
+          <Loading />
+        }
         { !!error &&
-          <div>
+          <div className="error--wide80">
             {error}
           </div>
         }

@@ -339,7 +339,7 @@ class PrivateView extends Component {
       })
       .filter((empl) => {
         if (searchValue !== '') {
-          return empl.get('name').toLocaleLowerCase().includes(searchValue) ||
+          return empl.get('name').toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()) ||
             empl.get('cardCode').includes(searchValue);
         }
         return true
