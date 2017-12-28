@@ -19,7 +19,8 @@
 .rk-editarea {
   margin-left: 250px;
   display: block;
-  padding: 12px;
+	padding: 12px;
+	padding-top: 0;
 }
 
 .rk-restaurants-list {
@@ -27,6 +28,12 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.activeR {
+	border-bottom: 2px solid rgb(171, 171, 228);
+	border-top: 2px solid rgb(171, 171, 228);
+	background: #fffffe;
 }
 
 .restaurantRoles-row {

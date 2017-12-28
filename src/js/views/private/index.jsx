@@ -26,7 +26,7 @@ import { getRolesByRest } from '../../redux/modules/roles';
 require('../../../style/index.css');
 require('../../../style/private.css');
 
-const RestaurantInfo = props => (<li>
+const RestaurantInfo = props => (<li className={`${props.isSelected ? 'activeR': ''}`}>
   <NavLink 
     to={`/${props.restMap.get('guid')}`}
     activeStyle={{
@@ -419,6 +419,7 @@ class PrivateView extends Component {
                   <h1>Все сотрудники</h1>
                   <EmployeesRole 
                     restId={this.props.selectedRestId}
+                    restName={selectedRestName}
                     // rolesMap={ // add prop rolesMap if restaurant is opened in sidebar
                     //   this.props.roles.valueSeq().filter(
                     //     role => { return rest.get('guid') == role.get('restGuid')}
@@ -428,15 +429,18 @@ class PrivateView extends Component {
                 </div>
               )}/>
           </Switch>
-          <TextField 
-            name="search-controlled"
-            value={this.state.searchValue}
-            onChange={this.handleChange}
-            hintText="Иванов... ИЛИ 105106..."
-            floatingLabelText="Поиск по работникам на текущей странице"
-            floatingLabelFixed={true}
-            fullWidth={true}
-          />
+          { 
+            this.props.selectedRestId !== undefined && !loadingEmplo &&
+            <TextField 
+              name="search-controlled"
+              value={this.state.searchValue}
+              onChange={this.handleChange}
+              hintText="Иванов... ИЛИ 105106..."
+              floatingLabelText="Поиск по работникам на текущей странице"
+              floatingLabelFixed={true}
+              fullWidth={true}
+            />
+          }
           {
             this.props.selectedRestId !== undefined && !loadingEmplo &&
             // this.props.selectedRoleId !== undefined &&

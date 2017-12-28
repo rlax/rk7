@@ -4,10 +4,9 @@ form {
   display: flex;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  margin-top: 15px;
   padding: 1px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;

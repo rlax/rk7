@@ -5,6 +5,9 @@ import Toggle from 'material-ui/Toggle';
 import { Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import EmployeeEditForm from '../pageSpecific/EmployeeEditForm';
 
+const pad4Styles = {padding: '4px'};
+const padUpStyles = {paddingTop: '8px', paddingBottom: '8px'};
+
 class CardExampleExpandable extends Component {
   static PropTypes = {
   }
@@ -44,6 +47,7 @@ class CardExampleExpandable extends Component {
       <div className={`employeeCard${isExpandedForEdit ? ' employeeCard--active' : ''}`}>
         <Card expanded={isExpandedForEdit}>
           <CardHeader
+            style={padUpStyles}
             title={empMap.get('name')}
             subtitle={`Код карты: ${empMap.get('cardCode')}`}
             actAsExpander={false}
@@ -67,7 +71,7 @@ class CardExampleExpandable extends Component {
             <FlatButton disabled label="- - -" />
             <FlatButton disabled label="+ + +" />
           </CardActions> */}
-          <CardText expandable>
+          <CardText expandable style={pad4Styles} >
             <EmployeeEditForm
               onSubmit={(values)=>this.props.saveEmployeeFn(empMap,values)}
               form={`${empMap.get('guid')}`}

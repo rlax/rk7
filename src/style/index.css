@@ -23,6 +23,7 @@ body {
 h1, h2 {
   color: $color-title;
   font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  margin: 12px;
 }
 
 .rk-remove {

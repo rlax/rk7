@@ -9,7 +9,8 @@ import { required, integer } from '../../utility/validation';
 require('../../../style/emplForm.css');
 
 let fieldStyle = { width: '260px'};
-let disabledFieldStyle = { width: '160px', height: '72px'};
+let disabledFieldStyle = { width: '0px', height: '72px'};
+let shownDisabledFieldStyle = { width: '100px', height: '72px'};
 
 let EmployeeEditForm = (props) => {
   const { handleSubmit, pristine, reset, submitting, initialValues, form, empData } = props
@@ -58,7 +59,7 @@ let EmployeeEditForm = (props) => {
         </div>
       </div>
       <div className="employeeCard__field-wrap">
-        <label>Имя</label>
+        {/* <label>Имя</label> */}
         <div>
           <Field
             name="name"
@@ -70,7 +71,7 @@ let EmployeeEditForm = (props) => {
         </div>
       </div>
       <div className="employeeCard__field-wrap">
-        <label>Внутренний ID</label>
+        {/* <label>Внутренний ID</label> */}
         <div>
           <Field
             name="id"
@@ -86,7 +87,7 @@ let EmployeeEditForm = (props) => {
         <div>
           <Field
             name="code"
-            style={disabledFieldStyle}
+            style={shownDisabledFieldStyle}
             component={TextField}
             disabled
             hintText="Код"
@@ -94,7 +95,7 @@ let EmployeeEditForm = (props) => {
         </div>
       </div>
       <div className="employeeCard__field-wrap">
-        <label>Идентификатор</label>
+        {/* <label>Идентификатор</label> */}
         <div>
           <Field
             name="guid"

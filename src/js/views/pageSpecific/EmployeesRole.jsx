@@ -105,7 +105,7 @@ class EmployeesRole extends Component {
           {!!restName ? restName : `--- (${restId})`}
         </div>
         <div className="roles-header">
-          <h2 className="role-title">{!!roleName ? roleName : `Роль ${roleId}`}</h2>
+          <h2 className="role-title">{!!roleName ? roleName : `Все роли`}</h2>
         </div>
       </div>
     );
